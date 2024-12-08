@@ -178,7 +178,8 @@ function AdminUsuarios() {
                 {clientes.map((cliente) => (
                   <tr key={cliente.id}>
                     <td>{cliente.id}</td>
-                    <td>{cliente.nombre}</td>                    <td>{cliente.correoElectronico}</td>
+                    <td>{cliente.nombre}</td>                    
+                    <td>{cliente.correoElectronico}</td>
                     <td>{cliente.contrasenia}</td>
                     <td className="acciones">
                       <button

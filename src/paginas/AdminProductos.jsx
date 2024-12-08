@@ -5,7 +5,7 @@ import "./AdminMenu.css";
 
 function AdminProductos() {
   const [productos, setProductos] = useState([]);
-  const [vendedores, setVendedores] = useState([]); // Para almacenar los vendedores
+  const [vendedores, setVendedores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editandoProducto, setEditandoProducto] = useState(null);
   const [formData, setFormData] = useState({
@@ -30,9 +30,7 @@ function AdminProductos() {
 
   const navigate = useNavigate();
 
-  // Obtener productos y vendedores al cargar el componente
   useEffect(() => {
-    // Obtener productos
     fetch("http://localhost:8080/colykke/producto")
       .then((response) => {
         if (!response.ok) {
@@ -49,7 +47,6 @@ function AdminProductos() {
         setLoading(false);
       });
 
-    // Obtener vendedores
     fetch("http://localhost:8080/colykke/vendedor")
       .then((response) => {
         if (!response.ok) {
@@ -70,7 +67,7 @@ function AdminProductos() {
   const handleEditar = (id) => {
     const producto = productos.find((producto) => producto.id === id);
     setEditandoProducto(producto);
-    setFormData({ ...producto });
+    setFormData({ ...producto, vendedor: producto.vendedor?.id || "" });
   };
 
   const handleEliminar = (id) => {
@@ -89,7 +86,6 @@ function AdminProductos() {
           );
         })
         .catch((err) => {
-          console.error("Error al eliminar el producto:", err.message);
           setError(`Error al eliminar el producto: ${err.message}`);
         });
     }
@@ -108,7 +104,11 @@ function AdminProductos() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        ...formData,
+        idVendedor: formData.vendedor,
+        vendedor: undefined,
+      }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -129,7 +129,6 @@ function AdminProductos() {
         setEditandoProducto(null);
       })
       .catch((err) => {
-        console.error("Error al actualizar el producto:", err.message);
         setError(`Error al actualizar el producto: ${err.message}`);
       });
   };
@@ -141,7 +140,7 @@ function AdminProductos() {
     });
   };
 
-  const handleAgregarNuevoProdcuto = () => {
+  const handleAgregarNuevoProducto = () => {
     if (
       !nuevoProducto.nombre ||
       !nuevoProducto.precio ||
@@ -156,7 +155,11 @@ function AdminProductos() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(nuevoProducto),
+      body: JSON.stringify({
+        ...nuevoProducto,
+        idVendedor: nuevoProducto.vendedor,
+        vendedor: undefined,
+      }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -182,7 +185,6 @@ function AdminProductos() {
         });
       })
       .catch((err) => {
-        console.error("Error al agregar nuevo producto:", err.message);
         setError(`Error al agregar nuevo producto: ${err.message}`);
       });
   };
@@ -192,7 +194,7 @@ function AdminProductos() {
       <div>
         <Link to="/admintodopoderoso" className="back-arrow">
           ←
-        </Link>{" "}
+        </Link>
       </div>
       <div className="admin-container">
         <button
@@ -311,15 +313,6 @@ function AdminProductos() {
                     onChange={handleChange}
                   />
                 </label>
-                <label>
-                  Vendedor:
-                  <input
-                    type="text"
-                    name="vendedor"
-                    value={formData.vendedor}
-                    onChange={handleChange}
-                  />
-                </label>
                 <button type="button" onClick={handleGuardar}>
                   Guardar
                 </button>
@@ -329,11 +322,10 @@ function AdminProductos() {
               </form>
             </div>
           )}
-
           {mostrarFormularioNuevo && (
             <div className="modal">
               <div className="modal-content">
-                <h3>Añadir Nuevo Producto</h3>
+                <h3>Agregar Nuevo Producto</h3>
                 <form>
                   <label>
                     Nombre:
@@ -372,7 +364,7 @@ function AdminProductos() {
                     />
                   </label>
                   <label>
-                    Imagen:
+                    Imagen (URL):
                     <input
                       type="text"
                       name="imagen"
@@ -395,8 +387,8 @@ function AdminProductos() {
                       ))}
                     </select>
                   </label>
-                  <button type="button" onClick={handleAgregarNuevoProdcuto}>
-                    Guardar
+                  <button type="button" onClick={handleAgregarNuevoProducto}>
+                    Agregar
                   </button>
                   <button
                     type="button"
