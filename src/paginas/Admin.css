@@ -1,0 +1,38 @@
+.panel-admin {
+  display: flex;
+  justify-content: center; /* Alinea los botones al centro horizontalmente */
+  flex-wrap: wrap; /* Permite que los botones pasen a la siguiente fila si no caben */
+  gap: 20px; /* Espaciado uniforme entre botones */
+  margin: 20px auto; /* Espaciado vertical alrededor del panel */
+  padding: 2%; /* Espaciado interno */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  width: 90%; /* Ajusta el ancho del panel */
+  border-radius: 10px;
+}
+
+.admin-button {
+  width: 20%; /* Ajuste del ancho relativo */
+  min-width: 150px; /* Ancho mínimo del botón para pantallas pequeñas */
+  height: auto; /* Ajuste automático de altura */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 10px 20px; /* Espaciado interno */
+  cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+  font-size: 18px; /* Tamaño de la fuente */
+  transition: background-color 0.3s, color 0.3s; /* Transición suave para efectos */
+  text-align: center; /* Centra el texto dentro del botón */
+  box-sizing: border-box; /* Incluye padding en el cálculo del ancho */
+}
+
+.EntrarAdmin {
+  background-color: #7b2cbf; /* Color inicial del botón */
+  color: #fff; /* Color del texto */
+  padding: 12px 24px; /* Tamaño del botón (altura y anchura) */
+  border: none; /* Sin bordes adicionales */
+  border-radius: 8px; /* Borde redondeado */
+  cursor: pointer; /* Cambia el cursor al estilo de clic */
+  font-size: 16px; /* Tamaño del texto */
+  font-weight: bold; /* Hace el texto más grueso */
+  transition: background-color 0.3s ease; /* Efecto de transición al cambiar de color */
+  width: 88%;
+  margin: 7% auto 0;
+}

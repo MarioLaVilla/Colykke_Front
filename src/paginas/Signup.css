@@ -1,0 +1,118 @@
+.signup-container {
+  max-width: 800px; /* Aumenta el ancho del contenedor */
+  margin: 40px auto;
+  padding: 30px; /* Aumenta el padding para que el contenido tenga más espacio */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Aumenta la sombra para que sea más notoria */
+  display: flex;
+  flex-direction: row; /* Cambia la dirección de flex a row */
+  justify-content: space-between;
+  align-items: center;
+  overflow-y: hidden;
+  height: 72vh;
+  gap: 100px;
+}
+
+.logo-container {
+  width: 50%; /* Ajusta el ancho del contenedor del logo a la mitad */
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 300px; /* Altura mínima para evitar desplazamientos */
+  justify-content: center;
+  position: relative;
+}
+
+.logo {
+  width: 150px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.signup-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.logo-container .error {
+  color: #ff0000;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: rgba(255, 0, 0, 0.1);
+  max-width: 300px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.back-arrow {
+  position: absolute;
+  top: 20px; /* Aumenta la separación de arriba */
+  left: 20px; /* Aumenta la separación de la izquierda */
+  font-size: 24px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #7b2cbf; /* Cambia el color a #7b2cbf, igual que el botón */
+}
+
+.back-arrow:hover {
+  color: #9d4edd; /* Cambia el color al pasar el mouse por encima, igual que el botón */
+}
+
+.form-container {
+  width: 50%; /* Ajusta el ancho del contenedor de formularios a la mitad */
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  display: block; /* Ajusta la label para que esté encima del cuadro de texto */
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 80%; /* Ajusta el ancho de los cuadros de texto */
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+.signup-button {
+  width: 87%; /* Ajusta el ancho del botón */
+  background-color: #7b2cbf; /* Color del botón */
+  color: #fff;
+  padding: 10px 20px; /* Padding horizontal y vertical */
+  border: none;
+  border-radius: 10px; /* Esquinas redondeadas */
+  cursor: pointer;
+  height: 45px; /* Altura del botón */
+  font-size: 16px;
+  text-align: center;
+  margin: 0 auto;
+  transition: background-color 0.3s ease; /* Transición suave para el hover */
+}
+
+.signup-container p {
+  margin-top: 20px;
+}
+
+.error {
+  color: red;
+  margin-bottom: 20px;
+}

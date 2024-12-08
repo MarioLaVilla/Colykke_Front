@@ -1,0 +1,90 @@
+.login-container {
+  max-width: 400px; /* Aumenta el ancho del contenedor */
+  margin: 0 auto;
+  padding: 30px; /* Aumenta el padding para que el contenido tenga más espacio */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Aumenta la sombra para que sea más notoria */
+  text-align: center;
+  width: 20%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  overflow: visible;
+}
+
+.login-container img {
+  width: 150px; /* Ajusta el ancho de la imagen */
+  height: 100px; /* Ajusta el alto de la imagen */
+  margin: 20px auto; /* Agrega un margen superior e inferior */
+  transition: filter 300ms;
+  position: relative;
+  display: block;
+}
+
+.login-container img:hover {
+  filter: drop-shadow(0 0 1em #9d4edd);
+}
+
+.back-arrow {
+  position: absolute;
+  top: 0;
+  left: 0; /* Cambia left por right para que se muestre en la esquina superior derecha */
+  font-size: 24px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #7b2cbf !important; /* Mantén el color definido */
+  z-index: 10;
+}
+
+.back-arrow:hover {
+  color: #9d4edd; /* Cambia el color al pasar el mouse por encima, igual que el botón */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.iniciarsesion {
+  background-color: #7b2cbf; /* Color inicial del botón */
+  color: #fff; /* Color del texto */
+  padding: 12px 24px; /* Tamaño del botón (altura y anchura) */
+  border: none; /* Sin bordes adicionales */
+  border-radius: 8px; /* Borde redondeado */
+  cursor: pointer; /* Cambia el cursor al estilo de clic */
+  font-size: 16px; /* Tamaño del texto */
+  font-weight: bold; /* Hace el texto más grueso */
+  transition: background-color 0.3s ease; /* Efecto de transición al cambiar de color */
+  width: 88%;
+  margin: 7% auto 0;
+}
+
+p {
+  margin-top: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: #337ab7;
+}
+
+a:hover {
+  color: #23527c;
+}

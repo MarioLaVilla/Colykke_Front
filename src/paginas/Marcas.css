@@ -1,0 +1,33 @@
+/* Contenedor de las marcas */
+.marcas-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly; /* Asegura que haya espacio entre las marcas */
+    gap: 20px; /* Espacio entre las marcas */
+    margin: 2%; /* Márgenes alrededor */
+    margin-top: 15%;
+  }
+  
+  /* Estilo para cada marca */
+  .marcas-container .marca {
+    flex: 1 1 calc(33.333% - 20px); /* Tres marcas por fila con espacio entre ellas */
+    box-sizing: border-box;
+    max-width: calc(33.333% - 20px); /* Asegura que no se desborden */
+  }
+  
+  /* Responsividad: Dos marcas por fila en pantallas medianas */
+  @media (max-width: 768px) {
+    .marcas-container .marca {
+      flex: 1 1 calc(50% - 20px); /* Dos marcas por fila */
+      max-width: calc(50% - 20px);
+    }
+  }
+  
+  /* Responsividad: Una marca por fila en pantallas pequeñas */
+  @media (max-width: 480px) {
+    .marcas-container .marca {
+      flex: 1 1 100%; /* Una marca por fila */
+      max-width: 100%;
+    }
+  }
+  

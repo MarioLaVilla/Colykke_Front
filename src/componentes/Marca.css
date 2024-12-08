@@ -1,0 +1,43 @@
+.card {
+  display: flex;
+  flex-direction: column; /* Cambiar la dirección del flex para apilar la imagen y el texto */
+  align-items: center;
+  width: 20vw;
+  height: auto; /* Ajusta la altura automáticamente según el contenido */
+  max-width: 650px;
+  padding: 50px 30px 50px 30px; /* Ajustar el padding para que no esté tan pegado */
+  margin-bottom: 30px;
+}
+
+.card img {
+  max-width: 280px;
+  width: 18vw;
+  height: auto; /* Ajustar la altura de la imagen automáticamente */
+  object-fit: contain;
+  margin-top: -60px;
+  margin-bottom: 20px; /* Añadir un espacio después de la imagen */
+  border-radius: inherit;
+  transition: 0.3s;
+}
+
+.card h1 {
+  font-size: 22px;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #3c096c;
+}
+
+.card h2 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  opacity: 0.66;
+  color: #3c096c;
+}
+
+.card h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  opacity: 0.66;
+  color: #3c096c;
+}

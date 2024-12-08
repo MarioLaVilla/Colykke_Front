@@ -1,0 +1,51 @@
+/* Carousel.css */
+
+/* Container for the carousel */
+.marca-slider,
+.producto-slider {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajusta el tamaño y número de columnas */
+    gap: 10px; /* Añade espacio entre elementos */
+    padding: 10px 50px;
+    width: 92vw;
+    box-sizing: border-box;
+}
+
+.product-card,
+.marca-card {
+    width: 100%; /* Asegura que las tarjetas ocupen el ancho completo de su celda */
+    max-width: 320px; /* Anchura máxima de las tarjetas */
+    height: 300px; /* Altura fija menor para todas las tarjetas */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: white; /* Fondo blanco para las tarjetas */
+}
+
+.product-card img,
+.marca-card img {
+    object-fit: cover; /* Asegura que la imagen cubra el área sin estirarse */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    height: 100%; /* Ocupa toda la altura disponible */
+    background-color: white; /* Fondo blanco para las imágenes */
+}
+
+.slick-dots li button:before {
+    color: #5a189a; /* Color de los puntos inactivos */
+}
+
+.slick-dots li.slick-active button:before {
+    color: #240046; /* Color del punto activo */
+}
+
+.slick-dots li button:before {
+    content: "";
+    font-size: 12px;
+    color: #5a189a !important; /* Color de los puntos inactivos */
+    opacity: 1;
+}
+
+.slick-dots li.slick-active button:before {
+    color: #240046 !important; /* Color del punto activo */
+    opacity: 1;
+}

@@ -1,0 +1,143 @@
+p {
+	margin: 0;
+}
+
+.tarjeta {
+	display: flex;
+	height: 500px;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.30);
+    margin-bottom: 5%;
+    flex-direction: row;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.tarjeta__image {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-left: 60px;
+    height: 100%;
+  }
+  
+  .large-image {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 100%;
+    object-fit: contain;
+    margin-left: 0.5rem;
+    padding: 1rem;
+    background-color: #fff;
+    box-sizing: border-box;
+    transition: opacity 0.3s;
+  }
+  
+  .small-images {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .small-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+    background-color: #fff;
+  }  
+
+  .tarjeta__content {
+    position: relative; /* change from absolute to relative */
+    width: calc(100% - 900px); /* calculate width based on parent's width */
+    background: #FFF;
+    padding: 2.5rem 1.75em;
+    font-size: 1.2rem;
+    margin-left: auto; /* add this to move to the right side */
+}
+
+.tarjeta__content__tag {
+	display: flex;
+	gap: 1rem;
+    justify-content: flex-end;
+}
+
+.tarjeta__content__tag span {
+	background: #E9E9E9;
+	font-size: 0.75rem;
+	border-radius: 8px;
+	padding: 0.15rem 0.25rem;
+}
+
+.tarjeta__content__title {
+    margin-top: 2rem;
+    font-size: 2rem;
+    font-weight: bold; /* added to make title bold */
+}
+
+.tarjeta__content__info {
+    margin-top: 0.5rem;
+    text-align: justify;
+    font-size: 1.1rem; /* changed text size */
+    line-height: 1.4;
+    color: #333;
+}
+
+.tarjeta__content__config {
+	margin-top: 0.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+    padding-right: 1rem;
+}
+
+.tarjeta__content__config .price {
+    font-size: 1.8rem; /* changed text size */
+    text-align: right;
+    margin-left: auto;
+}
+
+.tarjeta__content__action {
+	margin-top: 2rem;
+	display: flex;
+	gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.tarjeta__content__action button {
+	all: unset;
+	background: #7b2cbf;
+    border-radius: 5px;
+    cursor: pointer;
+	color: #FFF;
+	padding: 0.5rem 0.75rem;
+	text-transform: uppercase;
+	text-align: center;
+    background-image: linear-gradient(
+        -60deg,
+        #ffffff00 0%,
+        #ffffff00 40%,
+        #ffffff44 40%,
+        #ffffff44 60%,
+        #ffffff00 60%,
+        #ffffff00 100%
+    );
+    background-size: 200% 100%;
+    background-position-x: 150%;
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer{
+    0% {
+        background-position-x: 150%;
+    }
+    100% {
+        background-position-x: -50%;
+    }
+}

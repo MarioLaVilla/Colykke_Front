@@ -1,0 +1,62 @@
+footer {
+  background-color: transparent;
+  padding: 5px 0;
+  text-align: center;
+  width: 100%;
+  font-size: 12px;
+  margin-bottom: -25px;
+}
+
+footer img {
+  width: 70px;
+  height: 50px;
+  margin: 0 5px;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  padding-right: 20px; /* Add padding to separate from right margin */
+}
+
+.footer-link {
+  color: #000;
+  position: relative;
+  margin-left: 20px;
+}
+
+.footer-button {
+  margin: 0 2px;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+}
+
+.footer-button img {
+  width: 15px;
+  height: 15px;
+  margin-left: -20px;
+}
+
+/* Ajustes para mover los botones de las redes sociales */
+.footer-button.email {
+  margin-right: 100px; /* Mueve el botón de mail un poco más a la derecha */
+}
+
+.footer-button.instagram {
+  margin-right: 20px; /* Mueve el botón de Instagram un poco más a la derecha */
+}
+
+/* Alineación para el copyright */
+.footer-copyright {
+  flex: 1;
+  text-align: center;
+  width: 100%;
+  margin-top: 0;
+  padding-right: 20px; /* Add padding to separate from right margin */
+}
