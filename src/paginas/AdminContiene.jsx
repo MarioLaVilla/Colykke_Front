@@ -1,57 +1,65 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./AdminMenu.css";
 
-function AdminUsuarios() {
-  const [clientes, setClientes] = useState([]);
+function AdminContiene() {
+  const [contienes, setContienes] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [editandoCliente, setEditandoCliente] = useState(null);
+  const [editandoContiene, setEditandoContiene] = useState(null);
   const [formData, setFormData] = useState({
-    nombre: "",
-    telefono: "",
-    correoElectronico: "",
-    contrasenia: "",
+    cantidad: "",
+    pedido: "",
+    producto: "",
   });
-
+  const [nuevoContiene, setNuevoContiene] = useState({
+    cantidad: "",
+    pedido: "",
+    producto: "",
+  });
+  const [error, setError] = useState(null);
   const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
-  const [nuevoCliente, setNuevoCliente] = useState({
-    nombre: "",
-    telefono: "",
-    correoElectronico: "",
-    contrasenia: "",
-  });
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:8080/colykke/cliente")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos: " + response.statusText);
-        }
-        return response.json();
-      })
+    fetch("http://localhost:8080/colykke/contiene")
+      .then((response) => response.json())
       .then((data) => {
-        setClientes(data.data);
+        setContienes(data.data);
         setLoading(false);
       })
       .catch((err) => {
         setError(err.message);
         setLoading(false);
       });
+
+    fetch("http://localhost:8080/colykke/producto")
+      .then((response) => response.json())
+      .then((data) => setProductos(data.data))
+      .catch((err) => setError("Error al obtener productos: " + err.message));
+
+    fetch("http://localhost:8080/colykke/pedido")
+      .then((response) => response.json())
+      .then((data) => setPedidos(data.data))
+      .catch((err) => setError("Error al obtener pedidos: " + err.message));
   }, []);
 
   const handleEditar = (id) => {
-    const cliente = clientes.find((cliente) => cliente.id === id);
-    setEditandoCliente(cliente);
-    setFormData({ ...cliente });
+    const contiene = contiene.find((contiene) => contiene.id === id);
+    setEditandoContiene(contiene);
+    setFormData({
+      cantidad: contiene.cantidad,
+      pedido: contiene.pedido?.id || "",
+      producto: contiene.producto?.id || "",
+    });
   };
 
   const handleEliminar = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
-      fetch(`http://localhost:8080/colykke/cliente/${id}`, {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este contiene?")) {
+      fetch(`http://localhost:8080/colykke/contiene/${id}`, {
         method: "DELETE",
       })
         .then((response) => {
@@ -60,13 +68,12 @@ function AdminUsuarios() {
               `Error del servidor: ${response.status} ${response.statusText}`
             );
           }
-          setClientes((prevClientes) =>
-            prevClientes.filter((cliente) => cliente.id !== id)
+          setContienes((prevContiene) =>
+            prevContiene.filter((contiene) => contiene.id !== id)
           );
         })
         .catch((err) => {
-          console.error("Error al eliminar el cliente:", err.message);
-          setError(`Error al eliminar el cliente: ${err.message}`);
+          setError(`Error al eliminar el contiene: ${err.message}`);
         });
     }
   };
@@ -79,74 +86,70 @@ function AdminUsuarios() {
   };
 
   const handleGuardar = () => {
-    fetch(`http://localhost:8080/colykke/cliente/${editandoCliente.id}`, {
+    fetch(`http://localhost:8080/colykke/contiene/${editandoContiene.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        cantidad: formData.cantidad,
+        pedido: { id: formData.pedido },
+        producto: { id: formData.producto },
+      }),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `Error del servidor: ${response.status} ${response.statusText}`
-          );
-        }
-        return response.json();
-      })
-      .then((updatedCliente) => {
-        setClientes((prevClientes) =>
-          prevClientes.map((cliente) =>
-            cliente.id === updatedCliente.data.id
-              ? updatedCliente.data
-              : cliente
+      .then((response) => response.json())
+      .then((updatedContiene) => {
+        setContienes((prevContiene) =>
+          prevContiene.map((contiene) =>
+            contiene.id === updatedContiene.data.id
+              ? updatedContiene.data
+              : contiene
           )
         );
-        setEditandoCliente(null);
+        setEditandoContiene(null);
       })
-      .catch((err) => {
-        console.error("Error al actualizar el cliente:", err.message);
-        setError(`Error al actualizar el cliente: ${err.message}`);
-      });
+      .catch((err) => setError(`Error al actualizar el contiene: ${err.message}`));
   };
 
   const handleChangeNuevo = (e) => {
-    setNuevoCliente({
-      ...nuevoCliente,
+    setNuevoContiene({
+      ...nuevoContiene,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleAgregarNuevoCliente = () => {
-    fetch("http://localhost:8080/colykke/cliente", {
+  const handleAgregarNuevoContiene = () => {
+    if (
+      !nuevoContiene.cantidad ||
+      !nuevoContiene.pedido ||
+      !nuevoContiene.producto
+    ) {
+      setError("Por favor, completa todos los campos obligatorios.");
+      return;
+    }
+
+    fetch("http://localhost:8080/colykke/contiene", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(nuevoCliente),
+      body: JSON.stringify({
+        cantidad: nuevoContiene.cantidad,
+        pedido: { id: nuevoContiene.pedido },
+        producto: { id: nuevoContiene.producto },
+      }),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `Error del servidor: ${response.status} ${response.statusText}`
-          );
-        }
-        return response.json();
-      })
-      .then((clienteCreado) => {
-        setClientes((prevClientes) => [...prevClientes, clienteCreado.data]);
+      .then((response) => response.json())
+      .then((contieneCreado) => {
+        setContienes((prevContiene) => [...prevContiene, contieneCreado.data]);
         setMostrarFormularioNuevo(false);
-        setNuevoCliente({
-          nombre: "",
-          telefono: "",
-          correoElectronico: "",
-          contrasenia: "",
+        setNuevoContiene({
+          cantidad: "",
+          pedido: "",
+          producto: "",
         });
       })
-      .catch((err) => {
-        console.error("Error al agregar nuevo cliente:", err.message);
-        setError(`Error al agregar nuevo cliente: ${err.message}`);
-      });
+      .catch((err) => setError(`Error al agregar nuevo contiene: ${err.message}`));
   };
 
   return (
@@ -154,11 +157,11 @@ function AdminUsuarios() {
       <div>
         <Link to="/admintodopoderoso" className="back-arrow">
           ←
-        </Link>{" "}
+        </Link>
       </div>
       <div className="admin-container">
         <button
-          className="añadirusuario"
+          className="añadircontiene"
           onClick={() => setMostrarFormularioNuevo(true)}
         >
           +
@@ -171,31 +174,29 @@ function AdminUsuarios() {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Teléfono</th>
-                  <th>Correo Electrónico</th>
-                  <th>Contraseña</th>
+                  <th>Cantidad</th>
+                  <th>Pedido</th>
+                  <th>Producto</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {clientes.map((cliente) => (
-                  <tr key={cliente.id}>
-                    <td>{cliente.id}</td>
-                    <td>{cliente.nombre}</td>
-                    <td>{cliente.telefono}</td>
-                    <td>{cliente.correoElectronico}</td>
-                    <td>{cliente.contrasenia}</td>
+                {contienes.map((contiene) => (
+                  <tr key={contiene.id}>
+                    <td>{contiene.id}</td>
+                    <td>{contiene.cantidad}</td>
+                    <td>{contiene.pedido?.id || "Sin asignar"}</td>
+                    <td>{contiene.producto?.nombre || "Sin asignar"}</td>
                     <td className="acciones">
                       <button
                         className="btn-accion"
-                        onClick={() => handleEditar(cliente.id)}
+                        onClick={() => handleEditar(contiene.id)}
                       >
                         ✏️
                       </button>
                       <button
                         className="btn-accion"
-                        onClick={() => handleEliminar(cliente.id)}
+                        onClick={() => handleEliminar(contiene.id)}
                       >
                         🗑️
                       </button>
@@ -206,50 +207,53 @@ function AdminUsuarios() {
             </table>
           </div>
 
-          {editandoCliente && (
+          {editandoContiene && (
             <div className="form-edicion">
-              <h3>Editando Cliente</h3>
+              <h3>Editando Contiene</h3>
               <form>
                 <label>
-                  Nombre:
+                  Cantidad:
                   <input
-                    type="text"
-                    name="nombre"
-                    value={formData.nombre}
+                    type="number"
+                    name="cantidad"
+                    value={formData.cantidad}
                     onChange={handleChange}
                   />
                 </label>
                 <label>
-                  Teléfono:
-                  <input
-                    type="text"
-                    name="telefono"
-                    value={formData.telefono}
+                  Pedido:
+                  <select
+                    name="pedido"
+                    value={formData.pedido}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Seleccione un pedido</option>
+                    {pedidos.map((pedido) => (
+                      <option key={pedido.id} value={pedido.id}>
+                        {pedido.id}
+                      </option>
+                    ))}
+                  </select>
                 </label>
                 <label>
-                  Correo Electrónico:
-                  <input
-                    type="email"
-                    name="correoElectronico"
-                    value={formData.correoElectronico}
+                  Producto:
+                  <select
+                    name="producto"
+                    value={formData.producto}
                     onChange={handleChange}
-                  />
-                </label>
-                <label>
-                  Contraseña:
-                  <input
-                    type="password"
-                    name="contrasenia"
-                    value={formData.contrasenia}
-                    onChange={handleChange}
-                  />
+                  >
+                    <option value="">Seleccione un producto</option>
+                    {productos.map((producto) => (
+                      <option key={producto.id} value={producto.id}>
+                        {producto.nombre}
+                      </option>
+                    ))}
+                  </select>
                 </label>
                 <button type="button" onClick={handleGuardar}>
                   Guardar
                 </button>
-                <button type="button" onClick={() => setEditandoCliente(null)}>
+                <button type="button" onClick={() => setEditandoContiene(null)}>
                   Cancelar
                 </button>
               </form>
@@ -259,46 +263,49 @@ function AdminUsuarios() {
           {mostrarFormularioNuevo && (
             <div className="modal">
               <div className="modal-content">
-                <h3>Añadir Nuevo Usuario</h3>
+                <h3>Agregar Nuevo Contiene</h3>
                 <form>
                   <label>
-                    Nombre:
+                    Cantidad:
                     <input
-                      type="text"
-                      name="nombre"
-                      value={nuevoCliente.nombre}
+                      type="number"
+                      name="cantidad"
+                      value={nuevoContiene.cantidad}
                       onChange={handleChangeNuevo}
                     />
                   </label>
                   <label>
-                    Teléfono:
-                    <input
-                      type="text"
-                      name="telefono"
-                      value={nuevoCliente.telefono}
+                    Pedido:
+                    <select
+                      name="pedido"
+                      value={nuevoContiene.pedido}
                       onChange={handleChangeNuevo}
-                    />
+                    >
+                      <option value="">Seleccione un pedido</option>
+                      {pedidos.map((pedido) => (
+                        <option key={pedido.id} value={pedido.id}>
+                          {pedido.id}
+                        </option>
+                      ))}
+                    </select>
                   </label>
                   <label>
-                    Correo Electrónico:
-                    <input
-                      type="email"
-                      name="correoElectronico"
-                      value={nuevoCliente.correoElectronico}
+                    Producto:
+                    <select
+                      name="producto"
+                      value={nuevoContiene.producto}
                       onChange={handleChangeNuevo}
-                    />
+                    >
+                      <option value="">Seleccione un producto</option>
+                      {productos.map((producto) => (
+                        <option key={producto.id} value={producto.id}>
+                          {producto.nombre}
+                        </option>
+                      ))}
+                    </select>
                   </label>
-                  <label>
-                    Contraseña:
-                    <input
-                      type="password"
-                      name="contrasenia"
-                      value={nuevoCliente.contrasenia}
-                      onChange={handleChangeNuevo}
-                    />
-                  </label>
-                  <button type="button" onClick={handleAgregarNuevoCliente}>
-                    Guardar
+                  <button type="button" onClick={handleAgregarNuevoContiene}>
+                    Agregar
                   </button>
                   <button
                     type="button"
@@ -316,4 +323,4 @@ function AdminUsuarios() {
   );
 }
 
-export default AdminUsuarios;
+export default AdminContiene;

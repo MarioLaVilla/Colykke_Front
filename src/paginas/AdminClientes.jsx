@@ -3,36 +3,38 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./AdminMenu.css";
 
-function AdminUsuarios() {
+function AdminClientes() {
   const [clientes, setClientes] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editandoCliente, setEditandoCliente] = useState(null);
   const [formData, setFormData] = useState({
     nombre: "",
-    correoElectronico: "",
-    contrasenia: "",
+    usuarioId: "",
   });
 
   const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
   const [nuevoCliente, setNuevoCliente] = useState({
     nombre: "",
-    correoElectronico: "",
-    contrasenia: "",
+    usuarioId: "",
   });
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:8080/colykke/cliente")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos: " + response.statusText);
+    Promise.all([
+      fetch("http://localhost:8080/colykke/cliente"),
+      fetch("http://localhost:8080/colykke/usuario"),
+    ])
+      .then(async ([clientesRes, usuariosRes]) => {
+        if (!clientesRes.ok || !usuariosRes.ok) {
+          throw new Error("Error al obtener los datos");
         }
-        return response.json();
-      })
-      .then((data) => {
-        setClientes(data.data);
+        const clientesData = await clientesRes.json();
+        const usuariosData = await usuariosRes.json();
+        setClientes(clientesData.data);
+        setUsuarios(usuariosData.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -44,11 +46,14 @@ function AdminUsuarios() {
   const handleEditar = (id) => {
     const cliente = clientes.find((cliente) => cliente.id === id);
     setEditandoCliente(cliente);
-    setFormData({ ...cliente });
+    setFormData({
+      nombre: cliente.nombre,
+      usuarioId: cliente.usuario.id,
+    });
   };
 
   const handleEliminar = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
       fetch(`http://localhost:8080/colykke/cliente/${id}`, {
         method: "DELETE",
       })
@@ -77,12 +82,20 @@ function AdminUsuarios() {
   };
 
   const handleGuardar = () => {
+    if (!formData.usuarioId) {
+      setError("Debes seleccionar un usuario.");
+      return;
+    }
+
     fetch(`http://localhost:8080/colykke/cliente/${editandoCliente.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        nombre: formData.nombre,
+        usuarioId: formData.usuarioId,
+      }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -109,13 +122,19 @@ function AdminUsuarios() {
   };
 
   const handleChangeNuevo = (e) => {
+    const { name, value } = e.target;
     setNuevoCliente({
       ...nuevoCliente,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
   const handleAgregarNuevoCliente = () => {
+    if (!nuevoCliente.usuarioId) {
+      setError("Debes seleccionar un usuario.");
+      return;
+    }
+
     fetch("http://localhost:8080/colykke/cliente", {
       method: "POST",
       headers: {
@@ -136,8 +155,7 @@ function AdminUsuarios() {
         setMostrarFormularioNuevo(false);
         setNuevoCliente({
           nombre: "",
-          correoElectronico: "",
-          contrasenia: "",
+          usuarioId: "",
         });
       })
       .catch((err) => {
@@ -169,8 +187,8 @@ function AdminUsuarios() {
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
-                  <th>Correo Electrónico</th>
-                  <th>Contraseña</th>
+                  <th>Email</th>
+                  <th>Username</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -178,9 +196,9 @@ function AdminUsuarios() {
                 {clientes.map((cliente) => (
                   <tr key={cliente.id}>
                     <td>{cliente.id}</td>
-                    <td>{cliente.nombre}</td>                    
-                    <td>{cliente.correoElectronico}</td>
-                    <td>{cliente.contrasenia}</td>
+                    <td>{cliente.nombre}</td>
+                    <td>{cliente.usuario.email}</td>
+                    <td>{cliente.usuario.username}</td>
                     <td className="acciones">
                       <button
                         className="btn-accion"
@@ -215,22 +233,19 @@ function AdminUsuarios() {
                   />
                 </label>
                 <label>
-                  Correo Electrónico:
-                  <input
-                    type="email"
-                    name="correoElectronico"
-                    value={formData.correoElectronico}
+                  Usuario:
+                  <select
+                    name="usuarioId"
+                    value={formData.usuarioId}
                     onChange={handleChange}
-                  />
-                </label>
-                <label>
-                  Contraseña:
-                  <input
-                    type="password"
-                    name="contrasenia"
-                    value={formData.contrasenia}
-                    onChange={handleChange}
-                  />
+                  >
+                    <option value="">Selecciona un usuario</option>
+                    {usuarios.map((usuario) => (
+                      <option key={usuario.id} value={usuario.id}>
+                        {usuario.username} ({usuario.email})
+                      </option>
+                    ))}
+                  </select>
                 </label>
                 <button type="button" onClick={handleGuardar}>
                   Guardar
@@ -257,22 +272,19 @@ function AdminUsuarios() {
                     />
                   </label>
                   <label>
-                    Correo Electrónico:
-                    <input
-                      type="email"
-                      name="correoElectronico"
-                      value={nuevoCliente.correoElectronico}
+                    Usuario:
+                    <select
+                      name="usuarioId"
+                      value={nuevoCliente.usuarioId}
                       onChange={handleChangeNuevo}
-                    />
-                  </label>
-                  <label>
-                    Contraseña:
-                    <input
-                      type="password"
-                      name="contrasenia"
-                      value={nuevoCliente.contrasenia}
-                      onChange={handleChangeNuevo}
-                    />
+                    >
+                      <option value="">Selecciona un usuario</option>
+                      {usuarios.map((usuario) => (
+                        <option key={usuario.id} value={usuario.id}>
+                          {usuario.username} ({usuario.email})
+                        </option>
+                      ))}
+                    </select>
                   </label>
                   <button type="button" onClick={handleAgregarNuevoCliente}>
                     Guardar
@@ -293,4 +305,4 @@ function AdminUsuarios() {
   );
 }
 
-export default AdminUsuarios;
+export default AdminClientes;

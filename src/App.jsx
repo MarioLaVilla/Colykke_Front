@@ -8,7 +8,8 @@ import Login from './paginas/Login.jsx';
 import Signup from './paginas/Signup.jsx';
 import About from './paginas/About.jsx';
 import Admin from './paginas/Admin.jsx';
-import AdminUsuarios from './paginas/AdminUsusarios.jsx';
+import AdminClientes from './paginas/AdminClientes.jsx';
+import AdminUsuarios from './paginas/AdminUsuarios.jsx';
 import AdminVendedores from './paginas/AdminVendedores.jsx';
 import AdminProductos from './paginas/AdminProductos.jsx';
 import AdminPedidos from './paginas/AdminPedidos.jsx';
@@ -28,9 +29,10 @@ const router = createBrowserRouter([
   { path: '/admintodopoderoso', element: <Admin /> },
   { path: '/admintodopoderoso/adminusuarios', element: <AdminUsuarios /> },
   { path: '/admintodopoderoso/adminvendedores', element: <AdminVendedores /> },
+  { path: '/admintodopoderoso/adminclientes', element: <AdminClientes /> },
   { path: '/admintodopoderoso/adminproductos', element: <AdminProductos /> },
   { path: '/admintodopoderoso/adminpedidos', element: <AdminPedidos /> },
-  { path: '/admintodopoderoso/adminconiene', element: <AdminContiene /> },
+  { path: '/admintodopoderoso/admincontiene', element: <AdminContiene /> },
   { path: '/admintodopoderoso/adminestadisticas', element: <AdminEstadisticas /> },
 ]);
 

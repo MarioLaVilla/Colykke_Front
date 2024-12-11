@@ -54,15 +54,21 @@ function Admin() {
       <div className="panel-admin">
         <button
           className="admin-button"
-          onClick={() => navigate("/admintodopoderoso/adminusuarios")}
+          onClick={() => navigate("/admintodopoderoso/adminclientes")}
         >
-          Usuarios
+          Clientes
         </button>
         <button
           className="admin-button"
           onClick={() => navigate("/admintodopoderoso/adminvendedores")}
         >
           Vendedores
+        </button>
+        <button
+          className="admin-button"
+          onClick={() => navigate("/admintodopoderoso/adminusuarios")}
+        >
+          Usuarios
         </button>
         <button
           className="admin-button"
