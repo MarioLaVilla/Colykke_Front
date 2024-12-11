@@ -4,13 +4,13 @@ import "./AdminMenu.css";
 
 function AdminVendedores() {
   const [vendedores, setVendedores] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editandoVendedor, setEditandoVendedor] = useState(null);
   const [formData, setFormData] = useState({
     nombre: "",
-    correoElectronico: "",
-    contrasenia: "",
+    usuarioId: "",
     logo: "",
     telefono: "",
     info: "",
@@ -19,23 +19,25 @@ function AdminVendedores() {
   const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
   const [nuevoVendedor, setNuevoVendedor] = useState({
     nombre: "",
-    correoElectronico: "",
-    contrasenia: "",
+    usuarioId: "",
     logo: "",
     telefono: "",
     info: "",
   });
 
   useEffect(() => {
-    fetch("http://localhost:8080/colykke/vendedor")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos: " + response.statusText);
+    Promise.all([
+      fetch("http://localhost:8080/colykke/vendedor"),
+      fetch("http://localhost:8080/colykke/usuario"),
+    ])
+      .then(async ([vendedoresRes, usuariosRes]) => {
+        if (!vendedoresRes.ok || !usuariosRes.ok) {
+          throw new Error("Error al obtener los datos");
         }
-        return response.json();
-      })
-      .then((data) => {
-        setVendedores(data.data);
+        const vendedoresData = await vendedoresRes.json();
+        const usuariosData = await usuariosRes.json();
+        setVendedores(vendedoresData.data);
+        setUsuarios(usuariosData.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -47,7 +49,13 @@ function AdminVendedores() {
   const handleEditar = (id) => {
     const vendedor = vendedores.find((vendedor) => vendedor.id === id);
     setEditandoVendedor(vendedor);
-    setFormData({ ...vendedor });
+    setFormData({
+      nombre: vendedor.nombre,
+      usuarioId: vendedor.usuario.id,
+      logo: vendedor.logo,
+      telefono: vendedor.telefono,
+      info: vendedor.info,
+    });
   };
 
   const handleEliminar = (id) => {
@@ -80,6 +88,11 @@ function AdminVendedores() {
   };
 
   const handleGuardar = () => {
+    if (!formData.usuarioId) {
+      setError("Debes seleccionar un usuario.");
+      return;
+    }
+
     fetch(`http://localhost:8080/colykke/vendedor/${editandoVendedor.id}`, {
       method: "PUT",
       headers: {
@@ -112,13 +125,19 @@ function AdminVendedores() {
   };
 
   const handleChangeNuevo = (e) => {
+    const { name, value } = e.target;
     setNuevoVendedor({
       ...nuevoVendedor,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
   const handleAgregarNuevoVendedor = () => {
+    if (!nuevoVendedor.usuarioId) {
+      setError("Debes seleccionar un usuario.");
+      return;
+    }
+
     fetch("http://localhost:8080/colykke/vendedor", {
       method: "POST",
       headers: {
@@ -135,15 +154,11 @@ function AdminVendedores() {
         return response.json();
       })
       .then((vendedorCreado) => {
-        setVendedores((prevVendedores) => [
-          ...prevVendedores,
-          vendedorCreado.data,
-        ]);
+        setVendedores((prevVendedores) => [...prevVendedores, vendedorCreado.data]);
         setMostrarFormularioNuevo(false);
         setNuevoVendedor({
           nombre: "",
-          correoElectronico: "",
-          contrasenia: "",
+          usuarioId: "",
           logo: "",
           telefono: "",
           info: "",
@@ -178,8 +193,7 @@ function AdminVendedores() {
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
-                  <th>Correo Electrónico</th>
-                  <th>Contraseña</th>
+                  <th>Usuario</th>
                   <th>Logo</th>
                   <th>Teléfono</th>
                   <th>Info</th>
@@ -191,20 +205,8 @@ function AdminVendedores() {
                   <tr key={vendedor.id}>
                     <td>{vendedor.id}</td>
                     <td>{vendedor.nombre}</td>
-                    <td>{vendedor.correoElectronico}</td>
-                    <td>{vendedor.contrasenia}</td>
-                    <td>
-                      {/* Mostrar la imagen */}
-                      <img
-                        src={vendedor.logo}
-                        alt={vendedor.nombre}
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          objectFit: "contain",
-                        }}
-                      />
-                    </td>
+                    <td>{vendedor.usuario.username}</td>
+                    <td><img src={vendedor.logo} alt="Logo" style={{ width: "50px" }} /></td>
                     <td>{vendedor.telefono}</td>
                     <td>{vendedor.info}</td>
                     <td className="acciones">
@@ -241,31 +243,19 @@ function AdminVendedores() {
                   />
                 </label>
                 <label>
-                  Teléfono:
-                  <input
-                    type="text"
-                    name="telefono"
-                    value={formData.telefono}
+                  Usuario:
+                  <select
+                    name="usuarioId"
+                    value={formData.usuarioId}
                     onChange={handleChange}
-                  />
-                </label>
-                <label>
-                  Correo Electrónico:
-                  <input
-                    type="email"
-                    name="correoElectronico"
-                    value={formData.correoElectronico}
-                    onChange={handleChange}
-                  />
-                </label>
-                <label>
-                  Contraseña:
-                  <input
-                    type="password"
-                    name="contrasenia"
-                    value={formData.contrasenia}
-                    onChange={handleChange}
-                  />
+                  >
+                    <option value="">Selecciona un usuario</option>
+                    {usuarios.map((usuario) => (
+                      <option key={usuario.id} value={usuario.id}>
+                        {usuario.username} ({usuario.email})
+                      </option>
+                    ))}
+                  </select>
                 </label>
                 <label>
                   Logo:
@@ -277,7 +267,16 @@ function AdminVendedores() {
                   />
                 </label>
                 <label>
-                  Información:
+                  Teléfono:
+                  <input
+                    type="text"
+                    name="telefono"
+                    value={formData.telefono}
+                    onChange={handleChange}
+                  />
+                </label>
+                <label>
+                  Info:
                   <input
                     type="text"
                     name="info"
@@ -310,22 +309,19 @@ function AdminVendedores() {
                     />
                   </label>
                   <label>
-                    Correo Electrónico:
-                    <input
-                      type="email"
-                      name="correoElectronico"
-                      value={nuevoVendedor.correoElectronico}
+                    Usuario:
+                    <select
+                      name="usuarioId"
+                      value={nuevoVendedor.usuarioId}
                       onChange={handleChangeNuevo}
-                    />
-                  </label>
-                  <label>
-                    Contraseña:
-                    <input
-                      type="password"
-                      name="contrasenia"
-                      value={nuevoVendedor.contrasenia}
-                      onChange={handleChangeNuevo}
-                    />
+                    >
+                      <option value="">Selecciona un usuario</option>
+                      {usuarios.map((usuario) => (
+                        <option key={usuario.id} value={usuario.id}>
+                          {usuario.username} ({usuario.email})
+                        </option>
+                      ))}
+                    </select>
                   </label>
                   <label>
                     Logo:

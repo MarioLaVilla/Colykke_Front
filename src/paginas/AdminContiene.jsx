@@ -48,7 +48,7 @@ function AdminContiene() {
   }, []);
 
   const handleEditar = (id) => {
-    const contiene = contiene.find((contiene) => contiene.id === id);
+    const contiene = contienes.find((contiene) => contiene.id === id);
     setEditandoContiene(contiene);
     setFormData({
       cantidad: contiene.cantidad,
