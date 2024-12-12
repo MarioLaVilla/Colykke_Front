@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./AdminMenu.css";
 
 function AdminUsuarios() {
@@ -18,6 +18,7 @@ function AdminUsuarios() {
     username: "",
     email: "",
   });
+  const [filtroId, setFiltroId] = useState(""); // Estado para el filtro por ID
 
   const navigate = useNavigate();
 
@@ -41,6 +42,14 @@ function AdminUsuarios() {
       });
   }, []);
 
+  const handleFiltroId = (e) => {
+    setFiltroId(e.target.value);
+  };
+
+  const usuariosFiltrados = usuarios.filter((usuario) =>
+    usuario.id.toString().includes(filtroId)
+  );
+
   return (
     <>
       <div>
@@ -49,6 +58,16 @@ function AdminUsuarios() {
         </Link>
       </div>
       <div className="admin-container">
+        <h1>Gestión de Usuarios</h1>
+        <div className="filtro-container">
+          <label>Filtrar por ID: </label>
+          <input
+            type="text"
+            placeholder="Ingrese ID"
+            value={filtroId}
+            onChange={handleFiltroId}
+          />
+        </div>
         {loading && <p>Cargando datos...</p>}
         {error && <p>Error: {error}</p>}
         <div className="admin-panel">
@@ -62,7 +81,7 @@ function AdminUsuarios() {
                 </tr>
               </thead>
               <tbody>
-                {usuarios.map((usuario) => (
+                {usuariosFiltrados.map((usuario) => (
                   <tr key={usuario.id}>
                     <td>{usuario.id}</td>
                     <td>{usuario.username}</td>

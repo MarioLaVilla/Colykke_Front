@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import "./AdminMenu.css";
 
 function AdminContiene() {
@@ -9,6 +8,7 @@ function AdminContiene() {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editandoContiene, setEditandoContiene] = useState(null);
+  const [filtroId, setFiltroId] = useState(""); // Estado para el filtro por ID
   const [formData, setFormData] = useState({
     cantidad: "",
     pedido: "",
@@ -17,8 +17,6 @@ function AdminContiene() {
 
   const [error, setError] = useState(null);
   const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:8080/colykke/contiene")
@@ -42,6 +40,10 @@ function AdminContiene() {
       .then((data) => setPedidos(data.data))
       .catch((err) => setError("Error al obtener pedidos: " + err.message));
   }, []);
+
+  const handleFiltroId = (e) => {
+    setFiltroId(e.target.value);
+  };
 
   const handleEliminar = (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este contiene?")) {
@@ -71,6 +73,10 @@ function AdminContiene() {
     });
   };
 
+  const contieneFiltrados = contienes.filter((contiene) =>
+    contiene.id.toString().includes(filtroId)
+  );
+
   return (
     <>
       <div>
@@ -79,6 +85,16 @@ function AdminContiene() {
         </Link>
       </div>
       <div className="admin-container">
+        <h1>Gestión de Contiene</h1>
+        <div className="filtro-container">
+          <label>Filtrar por ID: </label>
+          <input
+            type="text"
+            placeholder="Ingrese ID"
+            value={filtroId}
+            onChange={handleFiltroId}
+          />
+        </div>
         {loading && <p>Cargando datos...</p>}
         {error && <p>Error: {error}</p>}
         <div className="admin-panel">
@@ -94,7 +110,7 @@ function AdminContiene() {
                 </tr>
               </thead>
               <tbody>
-                {contienes.map((contiene) => (
+                {contieneFiltrados.map((contiene) => (
                   <tr key={contiene.id}>
                     <td>{contiene.id}</td>
                     <td>{contiene.cantidad}</td>

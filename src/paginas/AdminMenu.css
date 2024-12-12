@@ -8,7 +8,7 @@
   width: 108%;
   max-width: 108%; /* Asegura que ocupe todo el ancho del contenedor padre */
   box-sizing: border-box; /* Incluye padding y border en el tamaño total */
-  margin-top: 20%;
+  position: relative;
 }
 
 table {
@@ -101,7 +101,7 @@ p {
 }
 
 .admin-container {
-  margin-top: 60px; /* Espacio adicional para mover el contenido hacia abajo */
+  margin-top: 35%; /* Espacio adicional para mover el contenido hacia abajo */
   padding: 20px; /* Opcional: asegura espacio interno adicional */
   position: relative; /* Para mantener la relación con la flecha */
   width: calc(100% - 160px); /* Ajusta para dejar espacio para la navbar si es necesario */

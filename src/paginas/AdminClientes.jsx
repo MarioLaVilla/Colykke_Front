@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./AdminMenu.css";
 
@@ -8,6 +7,7 @@ function AdminClientes() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editandoCliente, setEditandoCliente] = useState(null);
+  const [filtroId, setFiltroId] = useState(""); // Estado para el filtro por ID
   const [formData, setFormData] = useState({
     nombre: "",
     email: "",
@@ -19,10 +19,8 @@ function AdminClientes() {
     nombre: "",
     email: "",
     username: "",
-    password: "", // Añadir el campo para la contraseña
+    password: "",
   });
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:8080/colykke/cliente")
@@ -41,6 +39,10 @@ function AdminClientes() {
         setLoading(false);
       });
   }, []);
+
+  const handleFiltroId = (e) => {
+    setFiltroId(e.target.value);
+  };
 
   const handleEditar = (id) => {
     const cliente = clientes.find((cliente) => cliente.id === id);
@@ -90,7 +92,7 @@ function AdminClientes() {
       },
       body: JSON.stringify({
         nombre: formData.nombre,
-        usuarioId: editandoCliente.usuario.id, // Usa el ID del usuario relacionado
+        usuarioId: editandoCliente.usuario.id,
         email: formData.email,
         username: formData.username,
       }),
@@ -148,7 +150,6 @@ function AdminClientes() {
         return response.json();
       })
       .then((usuarioCreado) => {
-        // Ahora crea el cliente asociado al usuario
         return fetch("http://localhost:8080/colykke/cliente", {
           method: "POST",
           headers: {
@@ -156,7 +157,7 @@ function AdminClientes() {
           },
           body: JSON.stringify({
             nombre: nuevoCliente.nombre,
-            usuarioId: usuarioCreado.data.id, // Asociar el ID del usuario creado
+            usuarioId: usuarioCreado.data.id,
           }),
         });
       })
@@ -184,14 +185,28 @@ function AdminClientes() {
       });
   };
 
+  const clientesFiltrados = clientes.filter((cliente) =>
+    cliente.id.toString().includes(filtroId)
+  );
+
   return (
     <>
       <div>
         <Link to="/admintodopoderoso" className="back-arrow">
           ←
-        </Link>{" "}
+        </Link>
       </div>
       <div className="admin-container">
+        <h1>Gestión de Clientes</h1>
+        <div className="filtro-container">
+          <label>Filtrar por ID: </label>
+          <input
+            type="text"
+            placeholder="Ingrese ID"
+            value={filtroId}
+            onChange={handleFiltroId}
+          />
+        </div>
         <button
           className="añadirusuario"
           onClick={() => setMostrarFormularioNuevo(true)}
@@ -213,7 +228,7 @@ function AdminClientes() {
                 </tr>
               </thead>
               <tbody>
-                {clientes.map((cliente) => (
+                {clientesFiltrados.map((cliente) => (
                   <tr key={cliente.id}>
                     <td>{cliente.id}</td>
                     <td>{cliente.nombre}</td>
@@ -238,8 +253,9 @@ function AdminClientes() {
               </tbody>
             </table>
           </div>
-
-          {editandoCliente && (
+        </div>
+      </div>
+      {editandoCliente && (
             <div className="form-edicion">
               <h3>Editando Cliente</h3>
               <form>
@@ -335,8 +351,6 @@ function AdminClientes() {
               </div>
             </div>
           )}
-        </div>
-      </div>
     </>
   );
 }

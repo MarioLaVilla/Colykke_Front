@@ -24,6 +24,7 @@ function AdminVendedores() {
     telefono: "",
     info: "",
   });
+  const [filtroId, setFiltroId] = useState(""); // Estado para el filtro por ID
 
   useEffect(() => {
     fetch("http://localhost:8080/colykke/vendedor")
@@ -42,6 +43,14 @@ function AdminVendedores() {
         setLoading(false);
       });
   }, []);
+
+  const handleFiltroId = (e) => {
+    setFiltroId(e.target.value);
+  };
+
+  const vendedoresFiltrados = vendedores.filter((vendedor) =>
+    vendedor.id.toString().includes(filtroId)
+  );
 
   const handleEditar = (id) => {
     const vendedor = vendedores.find((vendedor) => vendedor.id === id);
@@ -112,9 +121,9 @@ function AdminVendedores() {
       info: formData.info,
       usuarioId: editandoVendedor.usuario.id, // Incluye el ID del usuario asociado
     };
-  
+
     console.log("Datos enviados al backend:", body); // Depuración
-  
+
     fetch(`http://localhost:8080/colykke/vendedor/${editandoVendedor.id}`, {
       method: "PUT",
       headers: {
@@ -146,7 +155,7 @@ function AdminVendedores() {
         console.error("Error al actualizar el vendedor:", err.message);
         setError(`Error al actualizar el vendedor: ${err.message}`);
       });
-  };  
+  };
 
   const handleChangeNuevo = (e) => {
     const { name, value } = e.target;
@@ -231,6 +240,16 @@ function AdminVendedores() {
         </Link>{" "}
       </div>
       <div className="admin-container">
+        <h1>Gestión de Vendedores</h1>
+        <div className="filtro-container">
+          <label>Filtrar por ID: </label>
+          <input
+            type="text"
+            placeholder="Ingrese ID"
+            value={filtroId}
+            onChange={handleFiltroId}
+          />
+        </div>
         <button
           className="añadirusuario"
           onClick={() => setMostrarFormularioNuevo(true)}
@@ -254,7 +273,7 @@ function AdminVendedores() {
                 </tr>
               </thead>
               <tbody>
-                {vendedores.map((vendedor) => (
+                {vendedoresFiltrados.map((vendedor) => (
                   <tr key={vendedor.id}>
                     <td>{vendedor.id}</td>
                     <td>{vendedor.nombre}</td>

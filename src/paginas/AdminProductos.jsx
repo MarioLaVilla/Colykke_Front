@@ -27,6 +27,7 @@ function AdminProductos() {
     vendedor: "",
   });
   const [error, setError] = useState(null);
+  const [filtroId, setFiltroId] = useState(""); // Estado para filtrar por ID
 
   const navigate = useNavigate();
 
@@ -63,6 +64,14 @@ function AdminProductos() {
         setError("Error al obtener los vendedores: " + err.message);
       });
   }, []);
+
+  const handleFiltroId = (e) => {
+    setFiltroId(e.target.value);
+  };
+
+  const productosFiltrados = productos.filter((producto) =>
+    producto.id.toString().includes(filtroId)
+  );
 
   const handleEditar = (id) => {
     const producto = productos.find((producto) => producto.id === id);
@@ -145,17 +154,16 @@ function AdminProductos() {
       setError("Por favor, completa todos los campos obligatorios.");
       return;
     }
-  
-    // Ajustar el payload para coincidir con el ProductoRequestDto del backend
+
     const payload = {
       nombre: nuevoProducto.nombre,
       descripcion: nuevoProducto.descripcion,
       color: nuevoProducto.color,
       precio: parseFloat(nuevoProducto.precio),
       imagen: nuevoProducto.imagen,
-      vendedorId: parseInt(nuevoProducto.vendedor, 10), // `vendedorId` debe coincidir con el backend
+      vendedorId: parseInt(nuevoProducto.vendedor, 10),
     };
-  
+
     fetch("http://localhost:8080/colykke/producto", {
       method: "POST",
       headers: {
@@ -186,7 +194,7 @@ function AdminProductos() {
       .catch((err) => {
         setError(`Error al agregar nuevo producto: ${err.message}`);
       });
-  };  
+  };
 
   return (
     <>
@@ -196,6 +204,16 @@ function AdminProductos() {
         </Link>
       </div>
       <div className="admin-container">
+        <h1>Gestión de Productos</h1>
+        <div className="filtro-container">
+          <label>Filtrar por ID: </label>
+          <input
+            type="text"
+            placeholder="Ingrese ID"
+            value={filtroId}
+            onChange={handleFiltroId}
+          />
+        </div>
         <button
           className="añadirproducto"
           onClick={() => setMostrarFormularioNuevo(true)}
@@ -220,7 +238,7 @@ function AdminProductos() {
                 </tr>
               </thead>
               <tbody>
-                {productos.map((producto) => (
+                {productosFiltrados.map((producto) => (
                   <tr key={producto.id}>
                     <td>{producto.id}</td>
                     <td>{producto.nombre}</td>
@@ -312,6 +330,21 @@ function AdminProductos() {
                     onChange={handleChange}
                   />
                 </label>
+                <label>
+                  Vendedor:
+                  <select
+                    name="vendedor"
+                    value={formData.vendedor}
+                    onChange={handleChange}
+                  >
+                    <option value="">Seleccione un vendedor</option>
+                    {vendedores.map((vendedor) => (
+                      <option key={vendedor.id} value={vendedor.id}>
+                        {vendedor.nombre}
+                      </option>
+                    ))}
+                  </select>
+                </label>
                 <button type="button" onClick={handleGuardar}>
                   Guardar
                 </button>
@@ -321,6 +354,7 @@ function AdminProductos() {
               </form>
             </div>
           )}
+
           {mostrarFormularioNuevo && (
             <div className="modal">
               <div className="modal-content">

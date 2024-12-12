@@ -14,7 +14,6 @@ function AdminPedidos() {
     clienteId: "",
     productosIds: [],
   });
-
   const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
   const [nuevoPedido, setNuevoPedido] = useState({
     direccion: "",
@@ -23,6 +22,7 @@ function AdminPedidos() {
   });
   const [error, setError] = useState(null);
   const [productosModal, setProductosModal] = useState(null);
+  const [filtroId, setFiltroId] = useState(""); // Estado para el filtro por ID
 
   const navigate = useNavigate();
 
@@ -53,6 +53,14 @@ function AdminPedidos() {
         setLoading(false);
       });
   };
+
+  const handleFiltroId = (e) => {
+    setFiltroId(e.target.value);
+  };
+
+  const pedidosFiltrados = pedidos.filter((pedido) =>
+    pedido.id.toString().includes(filtroId)
+  );
 
   const handleEditar = (id) => {
     const pedido = pedidos.find((pedido) => pedido.id === id);
@@ -212,6 +220,7 @@ function AdminPedidos() {
       });
   };  
 
+  
   return (
     <>
       <div>
@@ -220,6 +229,16 @@ function AdminPedidos() {
         </Link>
       </div>
       <div className="admin-container">
+        <h1>Gestión de Pedidos</h1>
+        <div className="filtro-container">
+          <label>Filtrar por ID: </label>
+          <input
+            type="text"
+            placeholder="Ingrese ID"
+            value={filtroId}
+            onChange={handleFiltroId}
+          />
+        </div>
         <button
           className="añadirusuario"
           onClick={() => setMostrarFormularioNuevo(true)}
@@ -241,7 +260,7 @@ function AdminPedidos() {
                 </tr>
               </thead>
               <tbody>
-                {pedidos.map((pedido) => (
+                {pedidosFiltrados.map((pedido) => (
                   <tr key={pedido.id}>
                     <td>{pedido.id}</td>
                     <td>{pedido.direccion}</td>
@@ -273,22 +292,8 @@ function AdminPedidos() {
               </tbody>
             </table>
           </div>
-
-          {productosModal && (
-            <div className="modal">
-              <div className="modal-content">
-                <h3>Productos del Pedido</h3>
-                <ul>
-                  {productosModal.map((producto) => (
-                    <li key={producto.id}>{producto.nombre}</li>
-                  ))}
-                </ul>
-                <button onClick={handleCloseProductosModal}>Cerrar</button>
-              </div>
-            </div>
-          )}
-
-          {editandoPedido && (
+        </div>
+        {editandoPedido && (
             <div className="form-edicion">
               <h3>Editando Pedido</h3>
               <form>
@@ -401,11 +406,14 @@ function AdminPedidos() {
                 </form>
               </div>
             </div>
-          )}
-        </div>
-      </div>
+          )}      </div>
     </>
   );
 }
 
 export default AdminPedidos;
+
+
+
+
+
