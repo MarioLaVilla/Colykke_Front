@@ -4,13 +4,11 @@ import "./AdminMenu.css";
 
 function AdminVendedores() {
   const [vendedores, setVendedores] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editandoVendedor, setEditandoVendedor] = useState(null);
   const [formData, setFormData] = useState({
     nombre: "",
-    usuarioId: "",
     logo: "",
     telefono: "",
     info: "",
@@ -19,25 +17,24 @@ function AdminVendedores() {
   const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
   const [nuevoVendedor, setNuevoVendedor] = useState({
     nombre: "",
-    usuarioId: "",
+    email: "",
+    username: "",
+    password: "",
     logo: "",
     telefono: "",
     info: "",
   });
 
   useEffect(() => {
-    Promise.all([
-      fetch("http://localhost:8080/colykke/vendedor"),
-      fetch("http://localhost:8080/colykke/usuario"),
-    ])
-      .then(async ([vendedoresRes, usuariosRes]) => {
-        if (!vendedoresRes.ok || !usuariosRes.ok) {
+    fetch("http://localhost:8080/colykke/vendedor")
+      .then((response) => {
+        if (!response.ok) {
           throw new Error("Error al obtener los datos");
         }
-        const vendedoresData = await vendedoresRes.json();
-        const usuariosData = await usuariosRes.json();
-        setVendedores(vendedoresData.data);
-        setUsuarios(usuariosData.data);
+        return response.json();
+      })
+      .then((data) => {
+        setVendedores(data.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -51,7 +48,6 @@ function AdminVendedores() {
     setEditandoVendedor(vendedor);
     setFormData({
       nombre: vendedor.nombre,
-      usuarioId: vendedor.usuario.id,
       logo: vendedor.logo,
       telefono: vendedor.telefono,
       info: vendedor.info,
@@ -59,7 +55,7 @@ function AdminVendedores() {
   };
 
   const handleEliminar = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este vendedor?")) {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este vendedor y su usuario asociado?")) {
       fetch(`http://localhost:8080/colykke/vendedor/${id}`, {
         method: "DELETE",
       })
@@ -88,11 +84,6 @@ function AdminVendedores() {
   };
 
   const handleGuardar = () => {
-    if (!formData.usuarioId) {
-      setError("Debes seleccionar un usuario.");
-      return;
-    }
-
     fetch(`http://localhost:8080/colykke/vendedor/${editandoVendedor.id}`, {
       method: "PUT",
       headers: {
@@ -133,11 +124,6 @@ function AdminVendedores() {
   };
 
   const handleAgregarNuevoVendedor = () => {
-    if (!nuevoVendedor.usuarioId) {
-      setError("Debes seleccionar un usuario.");
-      return;
-    }
-
     fetch("http://localhost:8080/colykke/vendedor", {
       method: "POST",
       headers: {
@@ -158,7 +144,9 @@ function AdminVendedores() {
         setMostrarFormularioNuevo(false);
         setNuevoVendedor({
           nombre: "",
-          usuarioId: "",
+          email: "",
+          username: "",
+          password: "",
           logo: "",
           telefono: "",
           info: "",
@@ -193,7 +181,7 @@ function AdminVendedores() {
                 <tr>
                   <th>ID</th>
                   <th>Nombre</th>
-                  <th>Usuario</th>
+                  <th>Email</th>
                   <th>Logo</th>
                   <th>Teléfono</th>
                   <th>Info</th>
@@ -205,8 +193,10 @@ function AdminVendedores() {
                   <tr key={vendedor.id}>
                     <td>{vendedor.id}</td>
                     <td>{vendedor.nombre}</td>
-                    <td>{vendedor.usuario.username}</td>
-                    <td><img src={vendedor.logo} alt="Logo" style={{ width: "50px" }} /></td>
+                    <td>{vendedor.usuario.email}</td>
+                    <td>
+                      <img src={vendedor.logo} alt="Logo" style={{ width: "50px" }} />
+                    </td>
                     <td>{vendedor.telefono}</td>
                     <td>{vendedor.info}</td>
                     <td className="acciones">
@@ -241,21 +231,6 @@ function AdminVendedores() {
                     value={formData.nombre}
                     onChange={handleChange}
                   />
-                </label>
-                <label>
-                  Usuario:
-                  <select
-                    name="usuarioId"
-                    value={formData.usuarioId}
-                    onChange={handleChange}
-                  >
-                    <option value="">Selecciona un usuario</option>
-                    {usuarios.map((usuario) => (
-                      <option key={usuario.id} value={usuario.id}>
-                        {usuario.username} ({usuario.email})
-                      </option>
-                    ))}
-                  </select>
                 </label>
                 <label>
                   Logo:
@@ -309,19 +284,31 @@ function AdminVendedores() {
                     />
                   </label>
                   <label>
-                    Usuario:
-                    <select
-                      name="usuarioId"
-                      value={nuevoVendedor.usuarioId}
+                    Email:
+                    <input
+                      type="email"
+                      name="email"
+                      value={nuevoVendedor.email}
                       onChange={handleChangeNuevo}
-                    >
-                      <option value="">Selecciona un usuario</option>
-                      {usuarios.map((usuario) => (
-                        <option key={usuario.id} value={usuario.id}>
-                          {usuario.username} ({usuario.email})
-                        </option>
-                      ))}
-                    </select>
+                    />
+                  </label>
+                  <label>
+                    Username:
+                    <input
+                      type="text"
+                      name="username"
+                      value={nuevoVendedor.username}
+                      onChange={handleChangeNuevo}
+                    />
+                  </label>
+                  <label>
+                    Contraseña:
+                    <input
+                      type="password"
+                      name="password"
+                      value={nuevoVendedor.password}
+                      onChange={handleChangeNuevo}
+                    />
                   </label>
                   <label>
                     Logo:

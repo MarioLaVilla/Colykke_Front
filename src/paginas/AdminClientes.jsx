@@ -5,36 +5,35 @@ import "./AdminMenu.css";
 
 function AdminClientes() {
   const [clientes, setClientes] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editandoCliente, setEditandoCliente] = useState(null);
   const [formData, setFormData] = useState({
     nombre: "",
-    usuarioId: "",
+    email: "",
+    username: "",
   });
 
   const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
   const [nuevoCliente, setNuevoCliente] = useState({
     nombre: "",
-    usuarioId: "",
+    email: "",
+    username: "",
+    password: "", // Añadir el campo para la contraseña
   });
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    Promise.all([
-      fetch("http://localhost:8080/colykke/cliente"),
-      fetch("http://localhost:8080/colykke/usuario"),
-    ])
-      .then(async ([clientesRes, usuariosRes]) => {
-        if (!clientesRes.ok || !usuariosRes.ok) {
+    fetch("http://localhost:8080/colykke/cliente")
+      .then((response) => {
+        if (!response.ok) {
           throw new Error("Error al obtener los datos");
         }
-        const clientesData = await clientesRes.json();
-        const usuariosData = await usuariosRes.json();
-        setClientes(clientesData.data);
-        setUsuarios(usuariosData.data);
+        return response.json();
+      })
+      .then((data) => {
+        setClientes(data.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -48,7 +47,8 @@ function AdminClientes() {
     setEditandoCliente(cliente);
     setFormData({
       nombre: cliente.nombre,
-      usuarioId: cliente.usuario.id,
+      email: cliente.usuario.email,
+      username: cliente.usuario.username,
     });
   };
 
@@ -75,18 +75,14 @@ function AdminClientes() {
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
   const handleGuardar = () => {
-    if (!formData.usuarioId) {
-      setError("Debes seleccionar un usuario.");
-      return;
-    }
-
     fetch(`http://localhost:8080/colykke/cliente/${editandoCliente.id}`, {
       method: "PUT",
       headers: {
@@ -94,7 +90,8 @@ function AdminClientes() {
       },
       body: JSON.stringify({
         nombre: formData.nombre,
-        usuarioId: formData.usuarioId,
+        email: formData.email,
+        username: formData.username,
       }),
     })
       .then((response) => {
@@ -130,17 +127,19 @@ function AdminClientes() {
   };
 
   const handleAgregarNuevoCliente = () => {
-    if (!nuevoCliente.usuarioId) {
-      setError("Debes seleccionar un usuario.");
-      return;
-    }
-
     fetch("http://localhost:8080/colykke/cliente", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(nuevoCliente),
+      body: JSON.stringify({
+        nombre: nuevoCliente.nombre,
+        usuario: {
+          email: nuevoCliente.email,
+          username: nuevoCliente.username,
+          password: nuevoCliente.password,
+        },
+      }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -155,7 +154,8 @@ function AdminClientes() {
         setMostrarFormularioNuevo(false);
         setNuevoCliente({
           nombre: "",
-          usuarioId: "",
+          email: "",
+          username: "",
         });
       })
       .catch((err) => {
@@ -233,19 +233,22 @@ function AdminClientes() {
                   />
                 </label>
                 <label>
-                  Usuario:
-                  <select
-                    name="usuarioId"
-                    value={formData.usuarioId}
+                  Email:
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
-                  >
-                    <option value="">Selecciona un usuario</option>
-                    {usuarios.map((usuario) => (
-                      <option key={usuario.id} value={usuario.id}>
-                        {usuario.username} ({usuario.email})
-                      </option>
-                    ))}
-                  </select>
+                  />
+                </label>
+                <label>
+                  Username:
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
                 </label>
                 <button type="button" onClick={handleGuardar}>
                   Guardar
@@ -260,7 +263,7 @@ function AdminClientes() {
           {mostrarFormularioNuevo && (
             <div className="modal">
               <div className="modal-content">
-                <h3>Añadir Nuevo Usuario</h3>
+                <h3>Añadir Nuevo Cliente</h3>
                 <form>
                   <label>
                     Nombre:
@@ -272,22 +275,35 @@ function AdminClientes() {
                     />
                   </label>
                   <label>
-                    Usuario:
-                    <select
-                      name="usuarioId"
-                      value={nuevoCliente.usuarioId}
+                    Email:
+                    <input
+                      type="email"
+                      name="email"
+                      value={nuevoCliente.email}
                       onChange={handleChangeNuevo}
-                    >
-                      <option value="">Selecciona un usuario</option>
-                      {usuarios.map((usuario) => (
-                        <option key={usuario.id} value={usuario.id}>
-                          {usuario.username} ({usuario.email})
-                        </option>
-                      ))}
-                    </select>
+                    />
+                  </label>
+                  <label>
+                    Contraseña:
+                    <input
+                      type="password"
+                      name="password"
+                      value={nuevoCliente.password}
+                      onChange={handleChangeNuevo}
+                    />
+                  </label>
+
+                  <label>
+                    Username:
+                    <input
+                      type="text"
+                      name="username"
+                      value={nuevoCliente.username}
+                      onChange={handleChangeNuevo}
+                    />
                   </label>
                   <button type="button" onClick={handleAgregarNuevoCliente}>
-                    Guardar
+                    Crear Cliente
                   </button>
                   <button
                     type="button"
