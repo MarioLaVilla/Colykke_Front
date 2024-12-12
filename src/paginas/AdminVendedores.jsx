@@ -48,6 +48,8 @@ function AdminVendedores() {
     setEditandoVendedor(vendedor);
     setFormData({
       nombre: vendedor.nombre,
+      email: vendedor.usuario.email, // Asegúrate de que el vendedor tiene un objeto `usuario`
+      username: vendedor.usuario.username,
       logo: vendedor.logo,
       telefono: vendedor.telefono,
       info: vendedor.info,
@@ -55,23 +57,42 @@ function AdminVendedores() {
   };
 
   const handleEliminar = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este vendedor y su usuario asociado?")) {
+    if (
+      window.confirm(
+        "¿Estás seguro de que deseas eliminar este vendedor y su usuario asociado?"
+      )
+    ) {
+      // Encuentra el vendedor para obtener su usuarioId
+      const vendedor = vendedores.find((vendedor) => vendedor.id === id);
+
+      // Paso 1: Eliminar el vendedor
       fetch(`http://localhost:8080/colykke/vendedor/${id}`, {
         method: "DELETE",
       })
         .then((response) => {
           if (!response.ok) {
             throw new Error(
-              `Error del servidor: ${response.status} ${response.statusText}`
+              `Error al eliminar el vendedor: ${response.status} ${response.statusText}`
             );
           }
+          // Paso 2: Eliminar el usuario asociado
+          return fetch(
+            `http://localhost:8080/colykke/usuario/${vendedor.usuario.id}`,
+            {
+              method: "DELETE",
+            }
+          );
+        })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Error al eliminar el usuario asociado: ${response.status} ${response.statusText}`
+            );
+          }
+          // Actualizar el estado local
           setVendedores((prevVendedores) =>
             prevVendedores.filter((vendedor) => vendedor.id !== id)
           );
-        })
-        .catch((err) => {
-          console.error("Error al eliminar el vendedor:", err.message);
-          setError(`Error al eliminar el vendedor: ${err.message}`);
         });
     }
   };
@@ -84,18 +105,30 @@ function AdminVendedores() {
   };
 
   const handleGuardar = () => {
+    const body = {
+      nombre: formData.nombre,
+      logo: formData.logo,
+      telefono: parseInt(formData.telefono, 10), // Asegúrate de enviar un número entero
+      info: formData.info,
+      usuarioId: editandoVendedor.usuario.id, // Incluye el ID del usuario asociado
+    };
+  
+    console.log("Datos enviados al backend:", body); // Depuración
+  
     fetch(`http://localhost:8080/colykke/vendedor/${editandoVendedor.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(body),
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error(
-            `Error del servidor: ${response.status} ${response.statusText}`
-          );
+          return response.json().then((error) => {
+            throw new Error(
+              `Error al actualizar el vendedor: ${response.status} ${response.statusText} - ${error.message}`
+            );
+          });
         }
         return response.json();
       })
@@ -113,7 +146,7 @@ function AdminVendedores() {
         console.error("Error al actualizar el vendedor:", err.message);
         setError(`Error al actualizar el vendedor: ${err.message}`);
       });
-  };
+  };  
 
   const handleChangeNuevo = (e) => {
     const { name, value } = e.target;
@@ -124,23 +157,55 @@ function AdminVendedores() {
   };
 
   const handleAgregarNuevoVendedor = () => {
-    fetch("http://localhost:8080/colykke/vendedor", {
+    // Paso 1: Crear el usuario asociado
+    fetch("http://localhost:8080/colykke/usuario", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(nuevoVendedor),
+      body: JSON.stringify({
+        email: nuevoVendedor.email,
+        username: nuevoVendedor.username,
+        password: nuevoVendedor.password,
+      }),
     })
       .then((response) => {
         if (!response.ok) {
           throw new Error(
-            `Error del servidor: ${response.status} ${response.statusText}`
+            `Error al crear el usuario: ${response.status} ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+      .then((usuarioCreado) => {
+        // Paso 2: Crear el vendedor asociado al usuario
+        return fetch("http://localhost:8080/colykke/vendedor", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nombre: nuevoVendedor.nombre,
+            usuarioId: usuarioCreado.data.id, // Asociar el usuario creado
+            logo: nuevoVendedor.logo,
+            telefono: nuevoVendedor.telefono,
+            info: nuevoVendedor.info,
+          }),
+        });
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Error al crear el vendedor: ${response.status} ${response.statusText}`
           );
         }
         return response.json();
       })
       .then((vendedorCreado) => {
-        setVendedores((prevVendedores) => [...prevVendedores, vendedorCreado.data]);
+        setVendedores((prevVendedores) => [
+          ...prevVendedores,
+          vendedorCreado.data,
+        ]);
         setMostrarFormularioNuevo(false);
         setNuevoVendedor({
           nombre: "",
@@ -195,7 +260,11 @@ function AdminVendedores() {
                     <td>{vendedor.nombre}</td>
                     <td>{vendedor.usuario.email}</td>
                     <td>
-                      <img src={vendedor.logo} alt="Logo" style={{ width: "50px" }} />
+                      <img
+                        src={vendedor.logo}
+                        alt="Logo"
+                        style={{ width: "50px" }}
+                      />
                     </td>
                     <td>{vendedor.telefono}</td>
                     <td>{vendedor.info}</td>
@@ -229,6 +298,24 @@ function AdminVendedores() {
                     type="text"
                     name="nombre"
                     value={formData.nombre}
+                    onChange={handleChange}
+                  />
+                </label>
+                <label>
+                  Email:
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </label>
+                <label>
+                  Username:
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
                     onChange={handleChange}
                   />
                 </label>

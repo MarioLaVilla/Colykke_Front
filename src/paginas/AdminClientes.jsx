@@ -117,7 +117,7 @@ function AdminClientes() {
         console.error("Error al actualizar el cliente:", err.message);
         setError(`Error al actualizar el cliente: ${err.message}`);
       });
-  };  
+  };
 
   const handleChangeNuevo = (e) => {
     const { name, value } = e.target;
@@ -182,7 +182,7 @@ function AdminClientes() {
         console.error("Error al agregar nuevo cliente:", err.message);
         setError(`Error al agregar nuevo cliente: ${err.message}`);
       });
-  };  
+  };
 
   return (
     <>
@@ -240,45 +240,45 @@ function AdminClientes() {
           </div>
 
           {editandoCliente && (
-  <div className="form-edicion">
-    <h3>Editando Cliente</h3>
-    <form>
-      <label>
-        Nombre:
-        <input
-          type="text"
-          name="nombre"
-          value={formData.nombre}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Email:
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Username:
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-        />
-      </label>
-      <button type="button" onClick={handleGuardar}>
-        Guardar
-      </button>
-      <button type="button" onClick={() => setEditandoCliente(null)}>
-        Cancelar
-      </button>
-    </form>
-  </div>
-)}
+            <div className="form-edicion">
+              <h3>Editando Cliente</h3>
+              <form>
+                <label>
+                  Nombre:
+                  <input
+                    type="text"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                  />
+                </label>
+                <label>
+                  Email:
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </label>
+                <label>
+                  Username:
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
+                </label>
+                <button type="button" onClick={handleGuardar}>
+                  Guardar
+                </button>
+                <button type="button" onClick={() => setEditandoCliente(null)}>
+                  Cancelar
+                </button>
+              </form>
+            </div>
+          )}
 
           {mostrarFormularioNuevo && (
             <div className="modal">
