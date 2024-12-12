@@ -8,6 +8,7 @@
   width: 108%;
   max-width: 108%; /* Asegura que ocupe todo el ancho del contenedor padre */
   box-sizing: border-box; /* Incluye padding y border en el tamaño total */
+  margin-top: 20%;
 }
 
 table {
