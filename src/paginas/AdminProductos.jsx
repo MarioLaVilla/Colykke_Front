@@ -141,25 +141,27 @@ function AdminProductos() {
   };
 
   const handleAgregarNuevoProducto = () => {
-    if (
-      !nuevoProducto.nombre ||
-      !nuevoProducto.precio ||
-      !nuevoProducto.vendedor
-    ) {
+    if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.vendedor) {
       setError("Por favor, completa todos los campos obligatorios.");
       return;
     }
-
+  
+    // Ajustar el payload para coincidir con el ProductoRequestDto del backend
+    const payload = {
+      nombre: nuevoProducto.nombre,
+      descripcion: nuevoProducto.descripcion,
+      color: nuevoProducto.color,
+      precio: parseFloat(nuevoProducto.precio),
+      imagen: nuevoProducto.imagen,
+      vendedorId: parseInt(nuevoProducto.vendedor, 10), // `vendedorId` debe coincidir con el backend
+    };
+  
     fetch("http://localhost:8080/colykke/producto", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...nuevoProducto,
-        idVendedor: nuevoProducto.vendedor,
-        vendedor: undefined,
-      }),
+      body: JSON.stringify(payload),
     })
       .then((response) => {
         if (!response.ok) {
@@ -170,10 +172,7 @@ function AdminProductos() {
         return response.json();
       })
       .then((productoCreado) => {
-        setProductos((prevProductos) => [
-          ...prevProductos,
-          productoCreado.data,
-        ]);
+        setProductos((prevProductos) => [...prevProductos, productoCreado.data]);
         setMostrarFormularioNuevo(false);
         setNuevoProducto({
           nombre: "",
@@ -187,7 +186,7 @@ function AdminProductos() {
       .catch((err) => {
         setError(`Error al agregar nuevo producto: ${err.message}`);
       });
-  };
+  };  
 
   return (
     <>
