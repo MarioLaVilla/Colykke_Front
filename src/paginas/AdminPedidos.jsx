@@ -112,40 +112,6 @@ function AdminPedidos() {
     }
   };
 
-  const handleGuardar = () => {
-    fetch(`http://localhost:8080/colykke/pedido/${editandoPedido.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        direccion: formData.direccion,
-        clienteId: parseInt(formData.clienteId),
-        productosIds: formData.productosIds.map((id) => parseInt(id)),
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `Error del servidor: ${response.status} ${response.statusText}`
-          );
-        }
-        return response.json();
-      })
-      .then((updatedPedido) => {
-        setPedidos((prevPedidos) =>
-          prevPedidos.map((pedido) =>
-            pedido.id === updatedPedido.data.id ? updatedPedido.data : pedido
-          )
-        );
-        setEditandoPedido(null);
-        cargarDatos();
-      })
-      .catch((err) => {
-        setError(`Error al actualizar el pedido: ${err.message}`);
-      });
-  };
-
   const handleChangeNuevo = (e) => {
     const { name, value } = e.target;
     if (name === "productosIds") {
@@ -162,16 +128,27 @@ function AdminPedidos() {
   };
 
   const handleAgregarNuevoPedido = () => {
+    if (!nuevoPedido.direccion || !nuevoPedido.clienteId || nuevoPedido.productosIds.length === 0) {
+      setError("Por favor, completa todos los campos obligatorios.");
+      return;
+    }
+  
+    // Crear el payload con la estructura esperada por el backend
+    const payload = {
+      direccion: nuevoPedido.direccion,
+      clienteId: parseInt(nuevoPedido.clienteId, 10),
+      contiene: nuevoPedido.productosIds.map((productoId) => ({
+        productoId: parseInt(productoId, 10),
+        cantidad: 1, // Cantidad predeterminada
+      })),
+    };
+  
     fetch("http://localhost:8080/colykke/pedido", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        direccion: nuevoPedido.direccion,
-        clienteId: parseInt(nuevoPedido.clienteId),
-        productosIds: nuevoPedido.productosIds.map((id) => parseInt(id)),
-      }),
+      body: JSON.stringify(payload),
     })
       .then((response) => {
         if (!response.ok) {
@@ -195,6 +172,45 @@ function AdminPedidos() {
         setError(`Error al agregar nuevo pedido: ${err.message}`);
       });
   };
+  
+  const handleGuardar = () => {
+    const payload = {
+      direccion: formData.direccion,
+      clienteId: parseInt(formData.clienteId, 10),
+      contiene: formData.productosIds.map((productoId) => ({
+        productoId: parseInt(productoId, 10),
+        cantidad: 1, // Cantidad predeterminada
+      })),
+    };
+  
+    fetch(`http://localhost:8080/colykke/pedido/${editandoPedido.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Error del servidor: ${response.status} ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+      .then((updatedPedido) => {
+        setPedidos((prevPedidos) =>
+          prevPedidos.map((pedido) =>
+            pedido.id === updatedPedido.data.id ? updatedPedido.data : pedido
+          )
+        );
+        setEditandoPedido(null);
+        cargarDatos();
+      })
+      .catch((err) => {
+        setError(`Error al actualizar el pedido: ${err.message}`);
+      });
+  };  
 
   return (
     <>
