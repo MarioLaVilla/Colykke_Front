@@ -1,0 +1,29 @@
+/* SearchBar.css */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto; /* Centra horizontalmente el contenedor */
+    width: 100%; /* Contenedor ocupa todo el ancho */
+    max-width: 1200px; /* Limita el ancho máximo */
+    padding: 8px; /* Espaciado interno */
+    border: 1px solid #7b2cbf; /* Borde visible */
+    border-radius: 50px; /* Bordes completamente redondeados */
+    box-sizing: border-box; /* Incluye padding y borde en el tamaño total */
+    height: 8%;
+  }
+  
+  .search-input {
+    width: 100%; /* Ocupa todo el ancho disponible del contenedor */
+    border: none; /* Sin borde adicional */
+    outline: none; /* Elimina el borde al enfocar */
+    padding: 12px 20px; /* Espaciado interno */
+    border-radius: 50px; /* Coincide con la curvatura del contenedor */
+    font-size: 16px;
+    box-sizing: border-box; /* Incluye el padding en el ancho */
+  }
+  
+  .search-input:focus {
+    outline: none; /* Evita bordes al enfocar */
+  }
+  

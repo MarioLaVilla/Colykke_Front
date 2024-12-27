@@ -3,6 +3,7 @@ import { FloatButton } from 'antd';
 import Navbar from '../componentes/Navbar/Navbar';
 import Footer from '../componentes/Footer/Footer';
 import Carousel from '../componentes/Carousel/Carousel';  // Importamos el nuevo componente
+import SearchBar from '../componentes/SearchBar/SearchBar';  // Importamos el componente de búsqueda
 
 function Inicio() {
   const [productos, setProductos] = useState([]);
@@ -30,10 +31,16 @@ function Inicio() {
         .catch(error => console.error('Error fetching marcas:', error));
     }, []);
 
+  const handleSearch = (query) => {
+    console.log('Buscar:', query);
+    // Aquí podrías implementar la lógica para filtrar productos o marcas
+  };
+
   return (
     <div className="app-container">
       <Navbar className="navegacion" />
       <div className="contenido-principal">
+        <SearchBar placeholder="Buscar productos o marcas..." onSearch={handleSearch} />
         <Carousel productos={productos} marcas={marcas} />
         <div className='trabajar'>
           <h1>¿Quieres trabajar con nosotros?</h1>
