@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FloatButton } from 'antd';
-import Navbar from '../componentes/Navbar';
-import Footer from '../componentes/Footer';
-import Marca from '../componentes/Marca';
+import Navbar from '../componentes/Navbar/Navbar';
+import Footer from '../componentes/Footer/Footer';
+import Marca from '../componentes/Marca/Marca';
 import "./Marcas.css"
 
 function Marcas() {

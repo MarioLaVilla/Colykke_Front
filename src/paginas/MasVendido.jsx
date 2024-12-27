@@ -1,6 +1,6 @@
 import { FloatButton } from "antd";
-import Navbar from "../componentes/Navbar";
-import Footer from "../componentes/Footer";
+import Navbar from "../componentes/Navbar/Navbar";
+import Footer from "../componentes/Footer/Footer";
 import { Card } from "antd";
 
 const { Meta } = Card;

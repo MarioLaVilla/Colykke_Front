@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FloatButton } from 'antd';
-import Navbar from '../componentes/Navbar';
-import Footer from '../componentes/Footer';
-import Carousel from '../componentes/Carousel';  // Importamos el nuevo componente
+import Navbar from '../componentes/Navbar/Navbar';
+import Footer from '../componentes/Footer/Footer';
+import Carousel from '../componentes/Carousel/Carousel';  // Importamos el nuevo componente
 
 function Inicio() {
   const [productos, setProductos] = useState([]);

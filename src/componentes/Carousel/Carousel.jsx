@@ -1,7 +1,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { Card } from 'antd';
-import Marca from './Marca';
+import Marca from '../Marca/Marca';
 import "slick-carousel/slick/slick.css";
 import "./Carousel.css"; 
 import "slick-carousel/slick/slick-theme.css";

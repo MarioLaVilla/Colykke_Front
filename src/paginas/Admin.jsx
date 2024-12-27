@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importa el hook de navegación
-import Navbar from "../componentes/Navbar";
-import Footer from "../componentes/Footer";
 import bcrypt from "bcryptjs";
 import "./Admin.css";
 
