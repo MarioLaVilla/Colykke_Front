@@ -40,12 +40,11 @@ function Inicio() {
 
   return (
     <div className="app-container">
-      <Navbar className="navegacion" />
-      <div className="contenido-principal">
         <SearchBar
-          placeholder="Buscar productos o marcas..."
           onSearch={handleSearch}
         />
+      <Navbar className="navegacion" />
+      <div className="contenido-principal">
         <Carousel productos={productos} marcas={marcas} />
         <div className="trabajar">
           <h1>¿Quieres trabajar con nosotros?</h1>

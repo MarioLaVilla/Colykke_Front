@@ -4,10 +4,10 @@
 .marca-slider,
 .producto-slider {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Ajusta el tamaño y número de columnas */
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Ajusta el tamaño y número de columnas */
     gap: 1px; /* Añade espacio entre elementos */
     padding: 10px 50px;
-    width: 80vw;
+    width: 82vw;
     box-sizing: border-box;
 }
 

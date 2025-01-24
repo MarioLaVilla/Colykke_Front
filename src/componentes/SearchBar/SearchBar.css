@@ -1,29 +1,31 @@
 .search-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px auto; /* Centra horizontalmente el contenedor */
-  width: 100%; /* Contenedor ocupa todo el ancho */
-  max-width: 600px; /* Limita el ancho máximo */
-  padding: 0; /* Sin espaciado interno adicional */
-  border: 2px solid #d896ff; /* Borde visible en color morado */
-  border-radius: 50px; /* Bordes completamente redondeados */
-  box-sizing: border-box; /* Incluye padding y borde en el tamaño total */
-  background-color: white; /* Fondo blanco */
-  height: 50px; /* Altura ajustada al diseño */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 1800px !important;
+  height: 40px !important;
+  margin: 20px auto !important;
+  border: 2px solid #9d4edd !important;
+  border-radius: 35px !important;
+  background-color: white !important;
+  margin-top: 40px !important;
+  margin-bottom: 20px !important;
 }
 
 .search-input {
-  width: 100%; /* Ocupa todo el ancho del contenedor */
-  border: none; /* Sin borde adicional */
-  outline: none; /* Elimina el borde al enfocar */
-  padding: 10px 20px; /* Espaciado interno */
-  border-radius: 50px; /* Coincide con la curvatura del contenedor */
-  font-size: 16px; /* Tamaño de fuente ajustado */
-  color: #333; /* Color del texto */
-  background-color: transparent; /* Fondo transparente */
-  box-sizing: border-box; /* Incluye padding en el cálculo del ancho */
+  flex: 1 !important;
+  border: none !important;
+  outline: none !important;
+  height: 100% !important;
+  padding: 0 15px !important;
+  font-size: 16px !important;
+  background-color: transparent !important;
+  position: fixed;
+  padding-top: 19px !important;
+  padding-left: 50px !important;
 }
+
 
 .search-input::placeholder {
   color: #9e7aab; /* Color del placeholder */
