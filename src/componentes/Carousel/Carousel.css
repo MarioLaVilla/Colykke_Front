@@ -4,16 +4,16 @@
 .marca-slider,
 .producto-slider {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajusta el tamaño y número de columnas */
-    gap: 10px; /* Añade espacio entre elementos */
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Ajusta el tamaño y número de columnas */
+    gap: 1px; /* Añade espacio entre elementos */
     padding: 10px 50px;
-    width: 92vw;
+    width: 80vw;
     box-sizing: border-box;
 }
 
 .product-card,
 .marca-card {
-    width: 100%; /* Asegura que las tarjetas ocupen el ancho completo de su celda */
+    width: 90%; /* Asegura que las tarjetas ocupen el ancho completo de su celda */
     max-width: 320px; /* Anchura máxima de las tarjetas */
     height: 300px; /* Altura fija menor para todas las tarjetas */
     display: flex;

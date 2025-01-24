@@ -7,11 +7,21 @@
   font-style: normal;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100%; /* Asegúrate de que el root ocupe toda la pantalla */
+  display: flex;
+  flex-direction: column;
+}
+
 :root {
   font-family: 'Bariol Regular', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -84,8 +94,4 @@ button img {
   button {
     background-color: #f9f9f9;
   }
-}
-
-::-webkit-scrollbar {
-  display: none;
 }

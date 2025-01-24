@@ -1,29 +1,35 @@
-/* SearchBar.css */
 .search-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px auto; /* Centra horizontalmente el contenedor */
-    width: 100%; /* Contenedor ocupa todo el ancho */
-    max-width: 1200px; /* Limita el ancho máximo */
-    padding: 8px; /* Espaciado interno */
-    border: 1px solid #7b2cbf; /* Borde visible */
-    border-radius: 50px; /* Bordes completamente redondeados */
-    box-sizing: border-box; /* Incluye padding y borde en el tamaño total */
-    height: 8%;
-  }
-  
-  .search-input {
-    width: 100%; /* Ocupa todo el ancho disponible del contenedor */
-    border: none; /* Sin borde adicional */
-    outline: none; /* Elimina el borde al enfocar */
-    padding: 12px 20px; /* Espaciado interno */
-    border-radius: 50px; /* Coincide con la curvatura del contenedor */
-    font-size: 16px;
-    box-sizing: border-box; /* Incluye el padding en el ancho */
-  }
-  
-  .search-input:focus {
-    outline: none; /* Evita bordes al enfocar */
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto; /* Centra horizontalmente el contenedor */
+  width: 100%; /* Contenedor ocupa todo el ancho */
+  max-width: 600px; /* Limita el ancho máximo */
+  padding: 0; /* Sin espaciado interno adicional */
+  border: 2px solid #d896ff; /* Borde visible en color morado */
+  border-radius: 50px; /* Bordes completamente redondeados */
+  box-sizing: border-box; /* Incluye padding y borde en el tamaño total */
+  background-color: white; /* Fondo blanco */
+  height: 50px; /* Altura ajustada al diseño */
+}
+
+.search-input {
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  border: none; /* Sin borde adicional */
+  outline: none; /* Elimina el borde al enfocar */
+  padding: 10px 20px; /* Espaciado interno */
+  border-radius: 50px; /* Coincide con la curvatura del contenedor */
+  font-size: 16px; /* Tamaño de fuente ajustado */
+  color: #333; /* Color del texto */
+  background-color: transparent; /* Fondo transparente */
+  box-sizing: border-box; /* Incluye padding en el cálculo del ancho */
+}
+
+.search-input::placeholder {
+  color: #9e7aab; /* Color del placeholder */
+  font-style: italic; /* Placeholder con estilo cursiva */
+}
+
+.search-input:focus {
+  outline: none; /* Evita bordes al enfocar */
+}

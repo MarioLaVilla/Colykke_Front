@@ -7,7 +7,7 @@ const SearchBar = ({ placeholder, onSearch }) => {
       <input
         type="text"
         className="search-input"
-        placeholder={placeholder || "Buscar..."}
+        placeholder={placeholder || "Buscar productos o marcas..."}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && onSearch) {
             onSearch(e.target.value);

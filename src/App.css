@@ -1,13 +1,15 @@
 body {
   margin: 0;
   padding: 0;
-  height: 100vh;
-  display: flex;
-  overflow-x: hidden;
+  min-height: 100vh;
+  overflow-x: hidden; /* Oculta el scroll horizontal */
+  height: 100%;
 }
 
 #root {
   display: flex;
+  flex-direction: column;
+  min-height: 100%;
   width: 100%;
   margin-left: 1%;
 }
@@ -30,11 +32,12 @@ body {
 .app-container {
   display: flex;
   flex-direction: column;
-  width: calc(100% - 80px); /* Resta el ancho de la barra de navegación */
-  margin-left: 80px; /* Margen para dejar espacio a la barra de navegación */
+  margin-left: 80px; /* Alinea con la barra lateral */
   box-sizing: border-box;
-  max-width: 100%;
-  min-height: 0;
+  min-height: 100vh; /* Ocupa al menos el alto de la ventana */
+  overflow: visible; /* Usa el scroll del body */
+  flex-grow: 1;
+  padding-right: 50px;
 }
 
 .logo {
@@ -69,12 +72,10 @@ body {
 }
 
 .contenido-principal {
-  flex: 1;
   width: 100%;
   box-sizing: border-box;
-  max-width: 100%;
-  position: relative;
-  flex-shrink: 0;
+  height: auto; /* Deja que crezca dinámicamente */
+  min-height: 100vh; /* Ocupa al menos toda la pantalla */
 }
 
 .trabajar {

@@ -1,27 +1,12 @@
-footer {
-  background-color: transparent;
-  padding: 5px 0;
-  text-align: center;
-  width: 100%;
-  font-size: 12px;
-  margin-bottom: -25px;
-}
-
-footer img {
-  width: 70px;
-  height: 50px;
-  margin: 0 5px;
-}
-
 .footer-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   margin: 0 auto;
-  flex-wrap: wrap;
   box-sizing: border-box;
   padding-right: 20px; /* Add padding to separate from right margin */
+  position: relative;
 }
 
 .footer-link {
