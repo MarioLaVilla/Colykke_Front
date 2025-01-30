@@ -1,70 +1,79 @@
 .About {
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow-y: auto;
-    background-image: linear-gradient(to bottom, #10002b, #240046, #3c096c, #5a189a, #7b2cbf);
-    margin: 0;
-    padding: 0;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  
-  .descripcion {
-    padding: 1% 0;
-    width: 80%; /* Reduce width to 80% */
-    height: auto; /* Set height to auto */
-    margin: 0 auto; /* Center the container */
-    color: #ffffff; /* Set text color to white */
-  }
-  
-  .descripcion h1 {
-    font-size: 36px;
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  background-image: linear-gradient(
+    to bottom,
+    #10002b,
+    #240046,
+    #3c096c,
+    #5a189a,
+    #7b2cbf
+  );
+  margin: 0;
+  padding: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
-  .descripcion h2 {
-    font-size: 25px;
-    margin-bottom: -3%;
-    margin-top: -5%;
-  }
-  
-  .descripcion p {
-    text-align: justify;
-    margin: 4% 20% 6% 20%;
-  }
-  
-  .logo-container-ab {
-    padding: 1% 0;
-    width: 80%; /* Reduce width to 80% */
-    height: auto; /* Set height to auto */
-    margin: 0 auto; /* Center the container */
-    text-align: center;
-    margin-top: 2%;
-  }
-  
-  .logo-container-ab img {
-    width: 20%; /* Set logo width to 20% of its parent */
-    height: auto; /* Set logo height to auto */
-    filter: invert(1);
-  }
-  
-  .work {
-    padding: 1% 0;
-    width: 80%; /* Reduce width to 80% */
-    height: auto; /* Set height to auto */
-    margin: 0 auto; /* Center the container */
-  }
+.descripcion {
+  padding: 1% 0;
+  width: 80%; /* Reduce width to 80% */
+  height: auto; /* Set height to auto */
+  margin: 0 auto; /* Center the container */
+  color: #ffffff; /* Set text color to white */
+}
 
-  .back-arrow-ab {
-    position: absolute;
-    top: 20px; /* Aumenta la separación de arriba */
-    left: 20px; /* Aumenta la separación de la izquierda */
-    font-size: 24px;
-    cursor: pointer;
-    text-decoration: none;
-    color: #ffffff !important; /* Cambia el color a #7b2cbf, igual que el botón */
-  }
-  
-  .back-arrow-ab:hover {
-    color: #e0aaff; /* Cambia el color al pasar el mouse por encima, igual que el botón */
-  }
+.descripcion h1 {
+  font-size: 36px;
+  text-align: center;
+}
+
+.descripcion h2 {
+  font-size: 25px;
+  margin-bottom: -3%;
+  margin-top: -5%;
+  text-align: center;
+}
+
+.descripcion p {
+  text-align: justify;
+  margin: 4% 20% 6% 20%;
+}
+
+.logo-container-ab {
+  padding: 1% 0;
+  width: 80%; /* Reduce width to 80% */
+  height: auto; /* Set height to auto */
+  margin: 0 auto; /* Center the container */
+  text-align: center;
+  margin-top: 2%;
+}
+
+.logo-container-ab img {
+  width: 20%; /* Set logo width to 20% of its parent */
+  height: auto; /* Set logo height to auto */
+  filter: invert(1);
+}
+
+.work {
+  padding: 1% 0;
+  width: 80%; /* Reduce width to 80% */
+  height: auto; /* Set height to auto */
+  margin: 0 auto; /* Center the container */
+}
+
+.back-arrow-ab {
+  position: absolute;
+  top: 20px; /* Aumenta la separación de arriba */
+  left: 20px; /* Aumenta la separación de la izquierda */
+  font-size: 24px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #ffffff !important; /* Cambia el color a #7b2cbf, igual que el botón */
+}
+
+.back-arrow-ab:hover {
+  color: #e0aaff; /* Cambia el color al pasar el mouse por encima, igual que el botón */
+}

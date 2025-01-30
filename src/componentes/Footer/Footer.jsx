@@ -1,11 +1,13 @@
 import "./Footer.css";
+import { FaInstagram } from "react-icons/fa";
+import { MdOutlineAlternateEmail } from "react-icons/md";
 
 function Footer() {
   return (
     <footer>
       <div className="footer-container">
-        <a href="/about" className="footer-link">
-          Sobre nosotros
+        <a href="/about" className="footer-link" style={{color:"#313131"}}>
+          Sobre nosotros 
         </a>
         <p className="footer-copyright">
           {" "}
@@ -18,10 +20,10 @@ function Footer() {
             rel="noopener noreferrer"
             className="footer-button"
           >
-            <img src="instagram.svg" alt="Instagram" />
+            <FaInstagram style={{ color: "#313131", fontSize: "18px" }}/>
           </a>
           <a href="mailto:colykke@gmail.com" className="footer-button">
-            <img src="email.png" alt="Correo electrónico" />
+            <MdOutlineAlternateEmail style={{ color: "#313131", fontSize: "18px" }}/>
           </a>
         </div>
       </div>

@@ -11,6 +11,12 @@
   background-color: white !important;
   margin-top: 40px !important;
   margin-bottom: 20px !important;
+  padding-left: 12px; /* Añade espacio para el ícono */
+  transition: box-shadow 0.3s ease; /* Transición suave para el efecto de sombra */
+}
+
+.search-bar:focus-within {
+  box-shadow: 8px 4px 20px #9d4edd; /* Sombra abajo y a la derecha */
 }
 
 .search-input {
@@ -21,11 +27,9 @@
   padding: 0 15px !important;
   font-size: 16px !important;
   background-color: transparent !important;
-  position: fixed;
-  padding-top: 19px !important;
-  padding-left: 50px !important;
+  padding-top: 20px !important;
+  padding-left: 0px !important;
 }
-
 
 .search-input::placeholder {
   color: #9e7aab; /* Color del placeholder */
@@ -34,4 +38,10 @@
 
 .search-input:focus {
   outline: none; /* Evita bordes al enfocar */
+}
+
+.icono {
+  font-size: 20px; /* Ajusta el tamaño del ícono si es necesario */
+  color: #9d4edd; /* Cambia el color si quieres */
+  margin-right: 10px; /* Espacio entre el ícono y el input */
 }

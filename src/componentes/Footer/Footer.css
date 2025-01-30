@@ -22,13 +22,6 @@
   display: inline-block;
 }
 
-.footer-button img {
-  width: 15px;
-  height: 15px;
-  margin-left: -20px;
-}
-
-/* Ajustes para mover los botones de las redes sociales */
 .footer-button.email {
   margin-right: 100px; /* Mueve el botón de mail un poco más a la derecha */
 }
@@ -37,7 +30,6 @@
   margin-right: 20px; /* Mueve el botón de Instagram un poco más a la derecha */
 }
 
-/* Alineación para el copyright */
 .footer-copyright {
   flex: 1;
   text-align: center;
